@@ -3,3 +3,6 @@ plugins.cfg
 build
 Debug
 Release
+*.taghl
+tags
+*.swp
