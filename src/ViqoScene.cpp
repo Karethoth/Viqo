@@ -201,11 +201,11 @@ void ViqoScene::LoadResources()
 void ViqoScene::Run()
 {
 #ifdef _DEBUG
-  mResourcesCfg = "resources_d.cfg";
-  mPluginsCfg = "plugins_d.cfg";
+  mResourcesCfg = "assets/config/resources_d.cfg";
+  mPluginsCfg = "assets/config/plugins_d.cfg";
 #else
-  mResourcesCfg = "resources.cfg";
-  mPluginsCfg = "plugins.cfg";
+  mResourcesCfg = "assets/config/resources.cfg";
+  mPluginsCfg = "assets/config/plugins.cfg";
 #endif
 
   if( !Setup() )

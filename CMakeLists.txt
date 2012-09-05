@@ -24,15 +24,23 @@ if(UNIX)
         endif(EXISTS "/usr/local/lib/OGRE/cmake")
 endif(UNIX)
 
-if (CMAKE_BUILD_TYPE STREQUAL "")
+if (NOT CMAKE_BUILD_TYPE)
   # CMake defaults to leaving CMAKE_BUILD_TYPE empty. This screws up
   # differentiation between debug and release builds.
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+ SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+           "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+                 FORCE)
 endif ()
 
 set(CMAKE_DEBUG_POSTFIX "_d")
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dist")
+
+
+set(CMAGE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
+set(CMAGE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g")
+set(CMAGE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O3")
+set(CMAGE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -O3")
 
 find_package(OGRE REQUIRED)
 
@@ -43,7 +51,7 @@ find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 
 if(NOT OIS_FOUND)
-        message(SEND_ERROR "Failed to find OIS.")
+  message(SEND_ERROR "Failed to find OIS.")
 endif()
 
 # Find Boost
@@ -100,7 +108,6 @@ set_target_properties(Viqo PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries(Viqo ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)
 
 # post-build copy for win32
 if(WIN32 AND NOT MINGW)
@@ -120,16 +127,16 @@ if(WIN32)
                 RUNTIME DESTINATION bin
                 CONFIGURATIONS All)
 
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Media
-                DESTINATION ./
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets
+                DESTINATION .
                 CONFIGURATIONS Release RelWithDebInfo Debug
         )
 
-        install(FILES ${CMAKE_SOURCE_DIR}/plugins.cfg
-                ${CMAKE_SOURCE_DIR}/resources.cfg
-                DESTINATION bin
-                CONFIGURATIONS Release RelWithDebInfo
-        )
+#install(FILES ${CMAKE_SOURCE_DIR}/plugins.cfg
+#${CMAKE_SOURCE_DIR}/resources.cfg
+#DESTINATION bin
+#CONFIGURATIONS Release RelWithDebInfo
+#)
 
         install(FILES ${CMAKE_SOURCE_DIR}/plugins_d.cfg
                 ${CMAKE_SOURCE_DIR}/resources_d.cfg
@@ -176,15 +183,15 @@ if(UNIX)
                 RUNTIME DESTINATION bin
                 CONFIGURATIONS All)
 
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/dist/media
-                DESTINATION ./
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets
+                DESTINATION .
                 CONFIGURATIONS Release RelWithDebInfo Debug
         )
 
-        install(FILES ${CMAKE_SOURCE_DIR}/plugins.cfg
-                ${CMAKE_SOURCE_DIR}/resources.cfg
-                DESTINATION bin
-                CONFIGURATIONS Release RelWithDebInfo Debug
-        )
+#install(FILES ${CMAKE_SOURCE_DIR}/plugins.cfg
+#${CMAKE_SOURCE_DIR}/resources.cfg
+#DESTINATION bin
+#CONFIGURATIONS Release RelWithDebInfo Debug
+#)
 
 endif(UNIX)

@@ -1,3 +1,5 @@
 resources.cfg
 plugins.cfg
 build
+Debug
+Release
