@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(Viqo)
 
 if(WIN32)
-        set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
+        set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/")
         set(OGRE_SAMPLES_INCLUDEPATH
                 "$ENV{OGRE_HOME}/Samples/include"
         )
@@ -21,7 +21,9 @@ if(UNIX)
 
         else ()
           message(SEND_ERROR "Failed to find module path.")
-        endif(EXISTS "/usr/local/lib/OGRE/cmake")
+        endif()
+
+
 endif(UNIX)
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -85,6 +87,17 @@ if (NOT OGRE_BUILD_PLATFORM_IPHONE)
         set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
+
+find_package(CEGUI REQUIRED)
+if(NOT CEGUI_FOUND)
+ message(SEND_ERROR "Failed to find CEGUI.")
+endif()
+if(NOT CEGUI_OgreRenderer_FOUND)
+ message(SEND_ERROR "Failed to find CEGUI_OgreRenderer.")
+endif()
+
+
+
 set(HDRS
         ./src/viqo/ViqoScene.hpp
         ./src/viqo/TestScene.hpp
@@ -98,7 +111,8 @@ set(SRCS
 
 include_directories( ${OIS_INCLUDE_DIRS}
         ${OGRE_INCLUDE_DIRS}
-        ${OGRE_SAMPLES_INCLUDEPATH}
+        ${CEGUI_INCLUDE_DIRS}
+        ${CEGUI_OgreRenderer_INCLUDE_DIRS}
 )
 
 add_executable(Viqo WIN32 ${HDRS} ${SRCS})
@@ -121,7 +135,7 @@ set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${CMAKE_SOURCE_DIR}/lib/libopensteer.a)
 
 add_dependencies(Viqo libopensteer)
 
-target_link_libraries(Viqo ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
+target_link_libraries(Viqo ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${CEGUI_LIBRARIES} ${CEGUI_OgreRenderer_LIBRARIES})
 
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)

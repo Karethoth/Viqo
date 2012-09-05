@@ -16,6 +16,13 @@ TestScene::~TestScene()
 
 void TestScene::CreateScene()
 {
+  mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+  CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
+  CEGUI::Font::setDefaultResourceGroup("Fonts");
+  CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+  CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+  CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
   mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
   mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
 

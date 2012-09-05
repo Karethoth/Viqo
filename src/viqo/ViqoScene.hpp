@@ -18,6 +18,9 @@
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
 
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
+
 
 class ViqoScene : public Ogre::FrameListener,
                   public Ogre::WindowEventListener,
@@ -62,6 +65,7 @@ class ViqoScene : public Ogre::FrameListener,
   Ogre::RenderWindow* mWindow;
   Ogre::String mResourcesCfg;
   Ogre::String mPluginsCfg;
+  CEGUI::OgreRenderer *mRenderer;
 
   // OgreBites
   OgreBites::SdkTrayManager* mTrayMgr;
