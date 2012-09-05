@@ -6,3 +6,7 @@ Release
 *.taghl
 tags
 *.swp
+deps*
+objs*
+.svn
+lib

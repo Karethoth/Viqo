@@ -86,14 +86,14 @@ if (NOT OGRE_BUILD_PLATFORM_IPHONE)
 endif()
 
 set(HDRS
-        ./src/ViqoScene.hpp
-        ./src/TestScene.hpp
+        ./src/viqo/ViqoScene.hpp
+        ./src/viqo/TestScene.hpp
 )
 
 set(SRCS
-        ./src/ViqoScene.cpp
-        ./src/TestScene.cpp
-        ./src/main.cpp
+        ./src/viqo/ViqoScene.cpp
+        ./src/viqo/TestScene.cpp
+        ./src/viqo/main.cpp
 )
 
 include_directories( ${OIS_INCLUDE_DIRS}
@@ -103,9 +103,26 @@ include_directories( ${OIS_INCLUDE_DIRS}
 
 add_executable(Viqo WIN32 ${HDRS} ${SRCS})
 
+
 set_target_properties(Viqo PROPERTIES DEBUG_POSTFIX _d)
 
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+add_custom_command(
+        OUTPUT ${CMAKE_SOURCE_DIR}/lib/libopensteer.a
+        COMMAND make &&cp objs_optimized/libopensteer.a ${CMAKE_SOURCE_DIR}/lib/libopensteer.a
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/opensteer/linux
+)
+add_custom_target(
+        libopensteer
+        DEPENDS ${CMAKE_SOURCE_DIR}/lib/libopensteer.a
+)
+
+set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${CMAKE_SOURCE_DIR}/lib/libopensteer.a)
+
+add_dependencies(Viqo libopensteer)
+
 target_link_libraries(Viqo ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
+
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
 
@@ -187,6 +204,12 @@ if(UNIX)
                 DESTINATION .
                 CONFIGURATIONS Release RelWithDebInfo Debug
         )
+
+        install(DIRECTORY ${CMAKE_SOURCE_DIR}/lib
+                DESTINATION .
+                CONFIGURATIONS Release RelWithDebInfo Debug
+        )
+
 
 #install(FILES ${CMAKE_SOURCE_DIR}/plugins.cfg
 #${CMAKE_SOURCE_DIR}/resources.cfg
