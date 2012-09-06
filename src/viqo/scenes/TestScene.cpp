@@ -25,7 +25,6 @@ CEGUI::MouseButton ConvertButton( OIS::MouseButtonID buttonID )
 
 TestScene::TestScene()
 {
-  name = "TestScene";
 }
 
 
@@ -49,6 +48,8 @@ void TestScene::CreateScene()
   CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
   CEGUI::System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
 
+  CEGUI::Window *guiRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("TextDemo.layout");
+  CEGUI::System::getSingleton().setGUISheet(guiRoot);
 
   mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
   mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );

@@ -34,8 +34,6 @@ namespace viqo
 
       virtual boost::shared_ptr<T> Get( unsigned int index )
       {
-        //if( stack.size() <= index )
-        //  return NULL;
         return stack.at( index );
       }
 
@@ -50,7 +48,7 @@ namespace viqo
     };
 
 
-  } // Namespace viqo::managers
+  } // Namespace viqo::stacks
 } // Namespace viqo
 
 #endif

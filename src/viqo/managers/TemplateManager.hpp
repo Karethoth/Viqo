@@ -36,14 +36,6 @@ namespace viqo
 
 
 
-      virtual bool Add( std::string key, boost::shared_ptr<T> item )
-      {
-        items[key] = item;
-        return true;
-      }
-
-
-
       virtual boost::shared_ptr<T> Get( std::string &key )
       {
         return items[key];
