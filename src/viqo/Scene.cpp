@@ -17,7 +17,8 @@ Scene::Scene( void ) : mRoot( 0 ),
                        mShutDown( false ),
                        mInputManager( 0 ),
                        mMouse( 0 ),
-                       mKeyboard( 0 )
+                       mKeyboard( 0 ),
+                       name( "" )
 {
 }
 

@@ -35,8 +35,7 @@ extern "C" {
       return 1;
 
     // Push the start scene to the stack
-    std::string startSceneName = "TestScene";
-    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( startSceneName ) );
+    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( "TestScene" ) );
 
     try
     {
@@ -61,8 +60,7 @@ extern "C" {
   {
     boost::shared_ptr<TestScene> tScene(new TestScene());
 
-    std::string tSceneName = "TestScene";
-    SinSceneManager.Instance()->Add( tSceneName, tScene );
+    SinSceneManager.Instance()->Add( tScene->GetName(), tScene );
 
     return true;
   }

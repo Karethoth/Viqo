@@ -25,6 +25,7 @@ CEGUI::MouseButton ConvertButton( OIS::MouseButtonID buttonID )
 
 TestScene::TestScene()
 {
+  name = "TestScene";
 }
 
 

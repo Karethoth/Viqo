@@ -31,6 +31,8 @@ namespace viqo
                     OgreBites::SdkTrayListener
   {
    protected:
+    std::string name;
+
     virtual bool Setup();
     virtual bool Configure();
     virtual void ChooseSceneManager();
@@ -87,6 +89,9 @@ namespace viqo
     virtual ~Scene();
 
     virtual void Run();
+
+    virtual std::string GetName()
+    { return name; }
   };
 } // namespace viqo
 
