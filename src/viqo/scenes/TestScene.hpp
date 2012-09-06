@@ -1,7 +1,7 @@
 #ifndef __TESTSCENE_HPP__
 #define __TESTSCENE_HPP__
 
-#include "Scene.hpp"
+#include "../Scene.hpp"
 
 namespace viqo
 {

@@ -100,14 +100,17 @@ endif()
 
 set(HDRS
         ./src/viqo/managers/TemplateManager.hpp
+        ./src/viqo/managers/SceneManager.hpp
+        ./src/viqo/singletons/SinSceneManager.hpp
         ./src/viqo/Scene.hpp
-        ./src/viqo/TestScene.hpp
+        ./src/viqo/scenes/TestScene.hpp
 )
 
 set(SRCS
-        ./src/viqo/managers/TemplateManager.cpp
+        ./src/viqo/managers/SceneManager.cpp
+        ./src/viqo/singletons/SinSceneManager.cpp
         ./src/viqo/Scene.cpp
-        ./src/viqo/TestScene.cpp
+        ./src/viqo/scenes/TestScene.cpp
         ./src/viqo/main.cpp
 )
 

@@ -17,13 +17,38 @@ namespace viqo
 
 
      public:
-      virtual ~TemplateManager();
+      virtual ~TemplateManager()
+      {
+        items.clear();
+      }
+
+
 
       virtual bool Load( std::string& ) = 0;
-      virtual bool Add( std::string, boost::shared_ptr<T> );
 
-      virtual boost::shared_ptr<T> Get( std::string& );
-      virtual boost::shared_ptr<T> Remove( std::string& );
+
+
+      virtual bool Add( std::string &key, boost::shared_ptr<T> item )
+      {
+        items[key] = item;
+        return true;
+      }
+
+
+
+      virtual boost::shared_ptr<T> Get( std::string &key )
+      {
+        return items[key];
+      }
+
+
+
+      virtual boost::shared_ptr<T> Remove( std::string &key )
+      {
+        boost::shared_ptr<T> ret = items[key];
+        items.erase(key);
+        return ret;
+      }
     };
 
 

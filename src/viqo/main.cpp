@@ -1,4 +1,9 @@
-#include "TestScene.hpp"
+#include "scenes/TestScene.hpp"
+#include "singletons/SinSceneManager.hpp"
+
+using namespace viqo::managers;
+using namespace viqo::singletons;
+using namespace viqo::scenes;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -15,10 +20,14 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
-    viqo::scenes::TestScene test;
+    boost::shared_ptr<TestScene> tScene(new TestScene());
+
+    std::string tSceneName = "TestScene";
+    SinSceneManager.Instance()->Add( tSceneName, tScene );
+    return 0;
 
     try {
-      test.Run();
+      tScene->Run();
     } catch( Ogre::Exception& e ) {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
       MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
