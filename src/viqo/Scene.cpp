@@ -1,27 +1,29 @@
-#include "ViqoScene.hpp"
+#include "Scene.hpp"
+
+using namespace viqo;
 
 
-ViqoScene::ViqoScene(void) : mRoot( 0 ),
-                             mCamera( 0 ),
-                             mSceneMgr( 0 ),
-                             mWindow( 0 ),
-                             mRenderer( 0 ),
-                             mResourcesCfg( Ogre::StringUtil::BLANK ),
-                             mPluginsCfg( Ogre::StringUtil::BLANK ),
-                             mTrayMgr( 0 ),
-                             mCameraMan( 0 ),
-                             mDetailsPanel( 0 ),
-                             mCursorWasVisible( false ),
-                             mShutDown( false ),
-                             mInputManager( 0 ),
-                             mMouse( 0 ),
-                             mKeyboard( 0 )
+Scene::Scene( void ) : mRoot( 0 ),
+                       mCamera( 0 ),
+                       mSceneMgr( 0 ),
+                       mWindow( 0 ),
+                       mRenderer( 0 ),
+                       mResourcesCfg( Ogre::StringUtil::BLANK ),
+                       mPluginsCfg( Ogre::StringUtil::BLANK ),
+                       mTrayMgr( 0 ),
+                       mCameraMan( 0 ),
+                       mDetailsPanel( 0 ),
+                       mCursorWasVisible( false ),
+                       mShutDown( false ),
+                       mInputManager( 0 ),
+                       mMouse( 0 ),
+                       mKeyboard( 0 )
 {
 }
 
 
 
-ViqoScene::~ViqoScene()
+Scene::~Scene()
 {
   if( mTrayMgr )
     delete mTrayMgr;
@@ -38,7 +40,7 @@ ViqoScene::~ViqoScene()
 
 
 
-bool ViqoScene::Configure()
+bool Scene::Configure()
 {
   // Show the configuration dialog and initialise the system
   // You can skip this and use root.restoreConfig() to load configuration
@@ -59,7 +61,7 @@ bool ViqoScene::Configure()
 
 
 
-void ViqoScene::ChooseSceneManager()
+void Scene::ChooseSceneManager()
 {
   // Get the SceneManager, in this case a generic one
   mSceneMgr = mRoot->createSceneManager( Ogre::ST_GENERIC );
@@ -67,7 +69,7 @@ void ViqoScene::ChooseSceneManager()
 
 
 
-void ViqoScene::CreateCamera()
+void Scene::CreateCamera()
 {
   // Create the camera
   mCamera = mSceneMgr->createCamera( "PlayerCam" );
@@ -84,7 +86,7 @@ void ViqoScene::CreateCamera()
 
 
 
-void ViqoScene::CreateFrameListener()
+void Scene::CreateFrameListener()
 {
   Ogre::LogManager::getSingletonPtr()->logMessage( "*** Initializing OIS ***" );
   OIS::ParamList pl;
@@ -138,13 +140,13 @@ void ViqoScene::CreateFrameListener()
 
 
 
-void ViqoScene::DestroyScene()
+void Scene::DestroyScene()
 {
 }
 
 
 
-void ViqoScene::CreateViewports()
+void Scene::CreateViewports()
 {
   // Create one viewport, entire window
   Ogre::Viewport* vp = mWindow->addViewport( mCamera );
@@ -158,7 +160,7 @@ void ViqoScene::CreateViewports()
 
 
 
-void ViqoScene::SetupResources()
+void Scene::SetupResources()
 {
   // Load resource paths from config file
   Ogre::ConfigFile cf;
@@ -186,20 +188,20 @@ void ViqoScene::SetupResources()
 
 
 
-void ViqoScene::CreateResourceListener()
+void Scene::CreateResourceListener()
 {
 }
 
 
 
-void ViqoScene::LoadResources()
+void Scene::LoadResources()
 {
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
 
 
-void ViqoScene::Run()
+void Scene::Run()
 {
 #ifdef _DEBUG
   mResourcesCfg = "assets/config/resources_d.cfg";
@@ -220,7 +222,7 @@ void ViqoScene::Run()
 
 
 
-bool ViqoScene::Setup()
+bool Scene::Setup()
 {
   mRoot = new Ogre::Root( mPluginsCfg );
 
@@ -252,7 +254,7 @@ bool ViqoScene::Setup()
 
 
 
-bool ViqoScene::frameRenderingQueued( const Ogre::FrameEvent& evt )
+bool Scene::frameRenderingQueued( const Ogre::FrameEvent& evt )
 {
   if( mWindow->isClosed() )
     return false;
@@ -286,7 +288,7 @@ bool ViqoScene::frameRenderingQueued( const Ogre::FrameEvent& evt )
 
 
 
-bool ViqoScene::keyPressed( const OIS::KeyEvent &arg )
+bool Scene::keyPressed( const OIS::KeyEvent &arg )
 {
   if( mTrayMgr->isDialogVisible() )
     return true;   // don't process any more keys if dialog is up
@@ -383,7 +385,7 @@ bool ViqoScene::keyPressed( const OIS::KeyEvent &arg )
 
 
 
-bool ViqoScene::keyReleased( const OIS::KeyEvent &arg )
+bool Scene::keyReleased( const OIS::KeyEvent &arg )
 {
   mCameraMan->injectKeyUp( arg );
   return true;
@@ -391,7 +393,7 @@ bool ViqoScene::keyReleased( const OIS::KeyEvent &arg )
 
 
 
-bool ViqoScene::mouseMoved( const OIS::MouseEvent &arg )
+bool Scene::mouseMoved( const OIS::MouseEvent &arg )
 {
   if( mTrayMgr->injectMouseMove( arg ) )
     return true;
@@ -402,7 +404,7 @@ bool ViqoScene::mouseMoved( const OIS::MouseEvent &arg )
 
 
 
-bool ViqoScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool Scene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
   if( mTrayMgr->injectMouseDown( arg, id ) )
     return true;
@@ -411,7 +413,7 @@ bool ViqoScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id 
   return true;
 }
 
-bool ViqoScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool Scene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
   if( mTrayMgr->injectMouseUp( arg, id ) )
     return true;
@@ -423,7 +425,7 @@ bool ViqoScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id
 
 
 //Adjust mouse clipping area
-void ViqoScene::windowResized( Ogre::RenderWindow* rw )
+void Scene::windowResized( Ogre::RenderWindow* rw )
 {
   unsigned int width, height, depth;
   int left, top;
@@ -437,7 +439,7 @@ void ViqoScene::windowResized( Ogre::RenderWindow* rw )
 
 
 //Unattach OIS before window shutdown (very important under Linux)
-void ViqoScene::WindowClosed( Ogre::RenderWindow* rw )
+void Scene::WindowClosed( Ogre::RenderWindow* rw )
 {
   //Only close for window that created OIS (the main window in these demos)
   if( rw == mWindow )

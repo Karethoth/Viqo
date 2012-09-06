@@ -15,7 +15,7 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
-    TestScene test;
+    viqo::scenes::TestScene test;
 
     try {
       test.Run();

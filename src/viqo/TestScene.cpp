@@ -1,5 +1,7 @@
 #include "TestScene.hpp"
 
+using namespace viqo::scenes;
+
 
 CEGUI::MouseButton ConvertButton( OIS::MouseButtonID buttonID )
 {
