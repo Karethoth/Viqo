@@ -3,6 +3,27 @@
 using namespace viqo;
 
 
+CEGUI::MouseButton viqo::ConvertButton( OIS::MouseButtonID buttonID )
+{
+  switch( buttonID )
+  {
+    case OIS::MB_Left:
+      return CEGUI::LeftButton;
+
+    case OIS::MB_Right:
+      return CEGUI::RightButton;
+
+    case OIS::MB_Middle:
+      return CEGUI::MiddleButton;
+
+    default:
+      return CEGUI::LeftButton;
+  }
+}
+
+
+
+
 Scene::Scene( void ) : mRoot( 0 ),
                        mCamera( 0 ),
                        mSceneMgr( 0 ),
@@ -17,8 +38,7 @@ Scene::Scene( void ) : mRoot( 0 ),
                        mShutDown( false ),
                        mInputManager( 0 ),
                        mMouse( 0 ),
-                       mKeyboard( 0 ),
-                       name( "" )
+                       mKeyboard( 0 )
 {
 }
 

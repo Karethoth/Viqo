@@ -106,6 +106,7 @@ set(HDRS
         ./src/viqo/singletons/SinSceneStack.hpp
         ./src/viqo/Scene.hpp
         ./src/viqo/scenes/TestScene.hpp
+        ./src/viqo/scenes/IntroScene.hpp
 )
 
 set(SRCS
@@ -114,6 +115,7 @@ set(SRCS
         ./src/viqo/singletons/SinSceneStack.cpp
         ./src/viqo/Scene.cpp
         ./src/viqo/scenes/TestScene.cpp
+        ./src/viqo/scenes/IntroScene.cpp
         ./src/viqo/main.cpp
 )
 

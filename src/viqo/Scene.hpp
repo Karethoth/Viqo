@@ -8,6 +8,7 @@
 #include <OgreViewport.h>
 #include <OgreSceneManager.h>
 #include <OgreRenderWindow.h>
+#include <OgreMaterial.h>
 #include <OgreConfigFile.h>
 
 #include <OISEvents.h>
@@ -31,8 +32,6 @@ namespace viqo
                     OgreBites::SdkTrayListener
   {
    protected:
-    std::string name;
-
     virtual bool Setup();
     virtual bool Configure();
     virtual void ChooseSceneManager();
@@ -89,10 +88,9 @@ namespace viqo
     virtual ~Scene();
 
     virtual void Run();
-
-    virtual std::string GetName()
-    { return name; }
   };
+
+  extern CEGUI::MouseButton ConvertButton( OIS::MouseButtonID );
 } // namespace viqo
 
 #endif

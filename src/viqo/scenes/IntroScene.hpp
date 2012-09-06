@@ -1,5 +1,5 @@
-#ifndef __TESTSCENE_HPP__
-#define __TESTSCENE_HPP__
+#ifndef __VIQO_SCENES_INTROSCENE_HPP_
+#define __VIQO_SCENES_INTROSCENE_HPP_
 
 #include "../Scene.hpp"
 
@@ -7,7 +7,7 @@ namespace viqo
 {
   namespace scenes
   {
-    class TestScene : public viqo::Scene
+    class IntroScene : public viqo::Scene
     {
      protected:
       virtual void CreateScene();
@@ -26,8 +26,8 @@ namespace viqo
 
 
      public:
-      TestScene();
-      virtual ~TestScene();
+      IntroScene();
+      virtual ~IntroScene();
 
       //virtual void Run();
     };

@@ -1,4 +1,5 @@
 #include "scenes/TestScene.hpp"
+#include "scenes/IntroScene.hpp"
 #include "singletons/SinSceneManager.hpp"
 #include "singletons/SinSceneStack.hpp"
 
@@ -35,8 +36,8 @@ extern "C" {
       return 1;
 
     // Push the start scene to the stack
-    std::string asd( "TestScene" );
-    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( asd ) );
+    std::string sceneName( "IntroScene" );
+    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( sceneName ) );
 
     try
     {
@@ -59,10 +60,13 @@ extern "C" {
 
   bool LoadScenes()
   {
-    boost::shared_ptr<TestScene> tScene(new TestScene());
+    boost::shared_ptr<IntroScene> introScene(new IntroScene());
+    std::string sceneName( "IntroScene" );
+    SinSceneManager.Instance()->Add( sceneName, introScene );
 
-    std::string asd( "TestScene" );
-    SinSceneManager.Instance()->Add( asd, tScene );
+    boost::shared_ptr<TestScene> testScene(new TestScene());
+    sceneName = std::string( "TestScene" );
+    SinSceneManager.Instance()->Add( sceneName, testScene );
 
     return true;
   }
