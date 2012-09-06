@@ -21,6 +21,7 @@
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/CEGUIOgreRenderer.h>
 
+
 namespace viqo
 {
   class Scene : public Ogre::FrameListener,
