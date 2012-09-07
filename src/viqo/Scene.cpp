@@ -24,13 +24,10 @@ CEGUI::MouseButton viqo::ConvertButton( OIS::MouseButtonID buttonID )
 
 
 
-Scene::Scene( void ) : mRoot( 0 ),
-                       mCamera( 0 ),
+Scene::Scene( void ) : mCamera( 0 ),
                        mSceneMgr( 0 ),
                        mWindow( 0 ),
                        mRenderer( 0 ),
-                       mResourcesCfg( Ogre::StringUtil::BLANK ),
-                       mPluginsCfg( Ogre::StringUtil::BLANK ),
                        mTrayMgr( 0 ),
                        mCameraMan( 0 ),
                        mDetailsPanel( 0 ),
@@ -46,6 +43,8 @@ Scene::Scene( void ) : mRoot( 0 ),
 
 Scene::~Scene()
 {
+  DestroyViewports();
+  DestroyScene();
   if( mTrayMgr )
     delete mTrayMgr;
 
@@ -54,30 +53,6 @@ Scene::~Scene()
 
   //Remove ourself as a Window listener
   Ogre::WindowEventUtilities::removeWindowEventListener( mWindow, this );
-  windowClosed( mWindow );
-
-  delete mRoot;
-}
-
-
-
-bool Scene::Configure()
-{
-  // Show the configuration dialog and initialise the system
-  // You can skip this and use root.restoreConfig() to load configuration
-  // settings if you were sure there are valid ones saved in ogre.cfg
-  if( mRoot->showConfigDialog() )
-  {
-    // If returned true, user clicked OK so initialise
-    // Here we choose to let the system create a default rendering window by passing 'true'
-    mWindow = mRoot->initialise( true, "Viqo" );
-
-    return true;
-  }
-  else
-  {
-    return false;
-  }
 }
 
 
@@ -181,32 +156,10 @@ void Scene::CreateViewports()
 
 
 
-void Scene::SetupResources()
+void Scene::DestroyViewports()
 {
-  // Load resource paths from config file
-  Ogre::ConfigFile cf;
-  cf.load( mResourcesCfg );
-
-  // Go through all sections & settings in the file
-  Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
-
-  Ogre::String secName, typeName, archName;
-  while( seci.hasMoreElements() )
-  {
-    secName = seci.peekNextKey();
-    Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-    Ogre::ConfigFile::SettingsMultiMap::iterator i;
-    for( i = settings->begin(); i != settings->end(); ++i )
-    {
-      typeName = i->first;
-      archName = i->second;
-      Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-        archName, typeName, secName
-      );
-    }
-  }
+  mWindow->removeAllViewports();
 }
-
 
 
 void Scene::CreateResourceListener()
@@ -222,35 +175,34 @@ void Scene::LoadResources()
 
 
 
-void Scene::Run()
+bool Scene::Run()
 {
-#ifdef _DEBUG
-  mResourcesCfg = "assets/config/resources_d.cfg";
-  mPluginsCfg = "assets/config/plugins_d.cfg";
-#else
-  mResourcesCfg = "assets/config/resources.cfg";
-  mPluginsCfg = "assets/config/plugins.cfg";
-#endif
 
   if( !Setup() )
-    return;
+    return false;
 
   mRoot->startRendering();
 
-  // clean up
+  return true;
+}
+
+
+
+void Scene::Stop()
+{
+  mRoot->queueEndRendering();
+  mRoot->removeFrameListener( this );
+  DestroyViewports();
   DestroyScene();
+  WindowClosed( mWindow );
 }
 
 
 
 bool Scene::Setup()
 {
-  mRoot = new Ogre::Root( mPluginsCfg );
-
-  SetupResources();
-
-  bool carryOn = Configure();
-  if (!carryOn) return false;
+  if( !mWindow )
+    return false;
 
   ChooseSceneManager();
   CreateCamera();
@@ -283,11 +235,14 @@ bool Scene::frameRenderingQueued( const Ogre::FrameEvent& evt )
   if( mShutDown )
     return false;
 
-  //Need to capture/update each device
-  mKeyboard->capture();
-  mMouse->capture();
 
-  mTrayMgr->frameRenderingQueued(evt);
+  if( mInputManager )
+  {
+    mKeyboard->capture();
+    mMouse->capture();
+  }
+
+  mTrayMgr->frameRenderingQueued( evt );
 
   if( !mTrayMgr->isDialogVisible() )
   {
@@ -474,5 +429,19 @@ void Scene::WindowClosed( Ogre::RenderWindow* rw )
       mInputManager = 0;
     }
   }
+}
+
+
+
+void Scene::SetRoot( boost::shared_ptr<Ogre::Root> root )
+{
+  mRoot = root;
+}
+
+
+
+void Scene::SetWindow( Ogre::RenderWindow *window )
+{
+  mWindow = window;
 }
 

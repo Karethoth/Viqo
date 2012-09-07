@@ -20,8 +20,10 @@ extern "C" {
 #endif
 
 
-  // Introduce LoadScenes()
-  bool LoadScenes();
+  // Introduce some functions
+  Ogre::RenderWindow* Configure( boost::shared_ptr<Ogre::Root> );
+  void SetupResources( Ogre::String );
+  bool LoadScenes( boost::shared_ptr<Ogre::Root>, Ogre::RenderWindow* );
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -30,9 +32,15 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
+    Ogre::String resourcesCfg = "assets/config/resources.cfg";
+    Ogre::String pluginsCfg  = "assets/config/plugins.cfg";
+
+    boost::shared_ptr<Ogre::Root> root( new Ogre::Root( pluginsCfg ) );
+    Ogre::RenderWindow *window = Configure( root );
+    SetupResources( resourcesCfg );
 
     // Load Scenes, quit if it fails.
-    if( !LoadScenes() )
+    if( !LoadScenes( root, window ) )
       return 1;
 
     // Push the start scene to the stack
@@ -41,8 +49,11 @@ extern "C" {
 
     try
     {
-      // Run the first scene of the stack
-      SinSceneStack.Instance()->Get( 0 )->Run();
+      // Run always the first scene of the stack
+      while( SinSceneStack.Instance()->Get( 0 )->Run() )
+      {
+        // Scene changed
+      }
     }
     catch( Ogre::Exception& e )
     {
@@ -54,21 +65,75 @@ extern "C" {
 #endif
     }
 
+    delete window;
+
     return 0;
   }
 
 
-  bool LoadScenes()
+
+  void SetupResources( Ogre::String resourcesCfg )
   {
-    boost::shared_ptr<IntroScene> introScene(new IntroScene());
+    // load resource paths from config file
+
+    Ogre::ConfigFile cf;
+    cf.load( resourcesCfg );
+
+    // go through all sections & settings in the file
+    Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
+
+    Ogre::String secName, typeName, archName;
+    while( seci.hasMoreElements() )
+    {
+      secName = seci.peekNextKey();
+      Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+      Ogre::ConfigFile::SettingsMultiMap::iterator i;
+      for( i = settings->begin(); i != settings->end(); ++i )
+      {
+        typeName = i->first;
+        archName = i->second;
+        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+          archName, typeName, secName
+        );
+      }
+    }
+  }
+
+
+
+  bool LoadScenes( boost::shared_ptr<Ogre::Root> root, Ogre::RenderWindow *window )
+  {
+    boost::shared_ptr<IntroScene> introScene( new IntroScene() );
+    introScene->SetRoot( root );
+    introScene->SetWindow( window );
     std::string sceneName( "IntroScene" );
     SinSceneManager.Instance()->Add( sceneName, introScene );
 
-    boost::shared_ptr<TestScene> testScene(new TestScene());
+    boost::shared_ptr<TestScene> testScene( new TestScene() );
+    testScene->SetRoot( root );
+    testScene->SetWindow( window );
     sceneName = std::string( "TestScene" );
     SinSceneManager.Instance()->Add( sceneName, testScene );
 
     return true;
+  }
+
+
+
+  Ogre::RenderWindow* Configure( boost::shared_ptr<Ogre::Root> root )
+  {
+    Ogre::RenderWindow *window = NULL;
+
+    // Show the configuration dialog and initialise the system
+    // You can skip this and use root.restoreConfig() to load configuration
+    // settings if you were sure there are valid ones saved in ogre.cfg
+    if( root->showConfigDialog() )
+    {
+      // If returned true, user clicked OK so initialise
+      // Here we choose to let the system create a default rendering window by passing 'true'
+      window = root->initialise( true, "Viqo" );
+    }
+    return window;
   }
 
 #ifdef __cplusplus

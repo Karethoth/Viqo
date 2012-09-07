@@ -2,6 +2,8 @@
 #define __VIQO_SCENES_INTROSCENE_HPP_
 
 #include "../Scene.hpp"
+#include <OGRE/OgreTimer.h>
+
 
 namespace viqo
 {
@@ -23,6 +25,9 @@ namespace viqo
       virtual bool mouseMoved( const OIS::MouseEvent &arg );
       virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
       virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+
+      Ogre::Timer  *timer;
+      unsigned long sceneLengthMs;
 
 
      public:

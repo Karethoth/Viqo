@@ -42,7 +42,7 @@ namespace viqo
       virtual boost::shared_ptr<T> Pop()
       {
         boost::shared_ptr<T> ret = stack.front();
-        stack.erase( stack.begin() );
+        stack.clear();
         return ret;
       }
     };

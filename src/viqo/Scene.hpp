@@ -33,14 +33,13 @@ namespace viqo
   {
    protected:
     virtual bool Setup();
-    virtual bool Configure();
     virtual void ChooseSceneManager();
     virtual void CreateCamera();
     virtual void CreateFrameListener();
     virtual void CreateScene() = 0;
     virtual void DestroyScene();
     virtual void CreateViewports();
-    virtual void SetupResources();
+    virtual void DestroyViewports();
     virtual void CreateResourceListener();
     virtual void LoadResources();
 
@@ -62,12 +61,10 @@ namespace viqo
     //Unattach OIS before window shutdown (very important under Linux)
     virtual void WindowClosed( Ogre::RenderWindow* rw );
 
-    Ogre::Root *mRoot;
+    boost::shared_ptr<Ogre::Root> mRoot;
     Ogre::Camera* mCamera;
     Ogre::SceneManager* mSceneMgr;
     Ogre::RenderWindow* mWindow;
-    Ogre::String mResourcesCfg;
-    Ogre::String mPluginsCfg;
     CEGUI::OgreRenderer *mRenderer;
 
     // OgreBites
@@ -87,7 +84,10 @@ namespace viqo
     Scene();
     virtual ~Scene();
 
-    virtual void Run();
+    virtual bool Run();
+    virtual void Stop();
+    virtual void SetRoot( boost::shared_ptr<Ogre::Root> );
+    virtual void SetWindow( Ogre::RenderWindow* );
   };
 
   extern CEGUI::MouseButton ConvertButton( OIS::MouseButtonID );

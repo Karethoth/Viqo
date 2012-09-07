@@ -1,10 +1,15 @@
 #include "IntroScene.hpp"
+#include "../singletons/SinSceneManager.hpp"
+#include "../singletons/SinSceneStack.hpp"
 
 using namespace viqo::scenes;
+using namespace viqo::singletons;
 
 
 IntroScene::IntroScene()
 {
+  sceneLengthMs = 5000;
+  timer = new Ogre::Timer();
 }
 
 
@@ -12,6 +17,7 @@ IntroScene::IntroScene()
 IntroScene::~IntroScene()
 {
   DestroyScene();
+  delete timer;
 }
 
 
@@ -47,6 +53,8 @@ void IntroScene::CreateScene()
   // Attach background to the scene
   Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Background");
   node->attachObject( rect );
+
+  timer->reset();
 }
 
 
@@ -64,25 +72,26 @@ void IntroScene::CreateFrameListener()
   size_t windowHnd = 0;
   std::ostringstream windowHndStr;
 
-  mWindow->getCustomAttribute("WINDOW", &windowHnd);
+  mWindow->getCustomAttribute( "WINDOW", &windowHnd );
   windowHndStr << windowHnd;
-  pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+  pl.insert( std::make_pair( std::string("WINDOW"), windowHndStr.str() ) );
 
   mInputManager = OIS::InputManager::createInputSystem( pl );
 
   mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
   mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
 
-  mMouse->setEventCallback(this);
-  mKeyboard->setEventCallback(this);
+  mMouse->setEventCallback( this );
+  mKeyboard->setEventCallback( this );
 
   //Set initial mouse clipping size
-  windowResized(mWindow);
+  windowResized( mWindow );
 
   //Register as a Window listener
-  Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
+  Ogre::WindowEventUtilities::addWindowEventListener( mWindow, this );
 
   mRoot->addFrameListener(this);
+
 }
 
 
@@ -95,10 +104,20 @@ bool IntroScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
   if( mShutDown )
     return false;
 
-  mKeyboard->capture();
-  mMouse->capture();
+  if( mInputManager )
+  {
+    mKeyboard->capture();
+    mMouse->capture();
+  }
 
-  //CEGUI::System::getSingleton().injectTimePulse( evt.timeSinceLastFrame );
+  if( timer->getMilliseconds() >= sceneLengthMs )
+  {
+    std::cout << "CHANGING SCENE!\n";
+    SinSceneStack.Instance()->Pop();
+    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( "TestScene" ) );
+    Stop();
+    return false;
+  }
 
   return true;
 }
@@ -108,9 +127,6 @@ bool IntroScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
 
 bool IntroScene::keyPressed( const OIS::KeyEvent &arg )
 {
-  //CEGUI::System &sys = CEGUI::System::getSingleton();
-  //sys.injectKeyDown(arg.key);
-  //sys.injectChar(arg.text);
   return true;
 }
 
@@ -118,7 +134,6 @@ bool IntroScene::keyPressed( const OIS::KeyEvent &arg )
 
 bool IntroScene::keyReleased( const OIS::KeyEvent &arg )
 {
-  //CEGUI::System::getSingleton().injectKeyUp(arg.key);
   return true;
 }
 
@@ -126,7 +141,6 @@ bool IntroScene::keyReleased( const OIS::KeyEvent &arg )
 
 bool IntroScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-  //CEGUI::System::getSingleton().injectMouseButtonDown( ConvertButton( id ) );
   return true;
 }
 
@@ -134,7 +148,6 @@ bool IntroScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id
 
 bool IntroScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-  //CEGUI::System::getSingleton().injectMouseButtonUp( ConvertButton( id ) );
   return true;
 }
 
@@ -142,13 +155,6 @@ bool IntroScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID i
 
 bool IntroScene::mouseMoved( const OIS::MouseEvent &arg )
 {
-  /*
-  CEGUI::System &sys = CEGUI::System::getSingleton();
-  sys.injectMouseMove( arg.state.X.rel, arg.state.Y.rel );
-
-  if( arg.state.Z.rel )
-    sys.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
-  */
   return true;
 }
 

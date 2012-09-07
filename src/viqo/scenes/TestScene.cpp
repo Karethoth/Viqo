@@ -84,9 +84,6 @@ void TestScene::CreateFrameListener()
   mMouse->setEventCallback(this);
   mKeyboard->setEventCallback(this);
 
-  //Set initial mouse clipping size
-  windowResized(mWindow);
-
   //Register as a Window listener
   Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
 
@@ -103,8 +100,11 @@ bool TestScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
   if( mShutDown )
     return false;
 
-  mKeyboard->capture();
-  mMouse->capture();
+  if( mInputManager )
+  {
+    mKeyboard->capture();
+    mMouse->capture();
+  }
 
   CEGUI::System::getSingleton().injectTimePulse( evt.timeSinceLastFrame );
 
