@@ -9,7 +9,7 @@ namespace viqo
 {
   namespace singletons
   {
-    extern TemplateSingleton<viqo::managers::SceneManager> SinSceneManager;
+    static TemplateSingleton<viqo::managers::SceneManager> SinSceneManager;
   }
 }
 

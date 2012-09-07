@@ -10,7 +10,7 @@ namespace viqo
 {
   namespace singletons
   {
-    extern TemplateSingleton< viqo::stacks::TemplateStack<Scene> > SinSceneStack;
+    static TemplateSingleton< viqo::stacks::TemplateStack<Scene> > SinSceneStack;
   }
 }
 
