@@ -183,7 +183,7 @@ bool Scene::Run()
 
   mRoot->startRendering();
 
-  return true;
+  return !mShutDown;
 }
 
 
@@ -193,8 +193,8 @@ void Scene::Stop()
   mRoot->queueEndRendering();
   mRoot->removeFrameListener( this );
   DestroyViewports();
-  DestroyScene();
   WindowClosed( mWindow );
+  DestroyScene();
 }
 
 
@@ -233,8 +233,10 @@ bool Scene::frameRenderingQueued( const Ogre::FrameEvent& evt )
     return false;
 
   if( mShutDown )
+  {
+    Stop();
     return false;
-
+  }
 
   if( mInputManager )
   {

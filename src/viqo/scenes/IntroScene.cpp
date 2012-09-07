@@ -32,7 +32,7 @@ void IntroScene::CreateScene()
   pointLight->setSpecularColour( 1.0, 0.0, 0.0 );
 
   Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("Background", "General");
-  material->getTechnique(0)->getPass(0)->createTextureUnitState("rockwall.tga");
+  material->getTechnique(0)->getPass(0)->createTextureUnitState("NDLogo.png");
   material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
   material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
   material->getTechnique(0)->getPass(0)->setLightingEnabled(false);

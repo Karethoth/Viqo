@@ -113,7 +113,6 @@ bool TestScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
 
 
 
-
 bool TestScene::keyPressed( const OIS::KeyEvent &arg )
 {
   CEGUI::System &sys = CEGUI::System::getSingleton();
