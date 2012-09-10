@@ -101,18 +101,24 @@ endif()
 set(HDRS
         ./src/viqo/managers/TemplateManager.hpp
         ./src/viqo/managers/SceneManager.hpp
+        ./src/viqo/managers/GameObjectManager.hpp
         ./src/viqo/singletons/SinSceneManager.hpp
         ./src/viqo/stacks/TemplateStack.hpp
         ./src/viqo/singletons/SinSceneStack.hpp
+        ./src/viqo/gameworld/GameObject.hpp
         ./src/viqo/Scene.hpp
         ./src/viqo/scenes/TestScene.hpp
+        ./src/viqo/scenes/GameScene.hpp
         ./src/viqo/scenes/IntroScene.hpp
 )
 
 set(SRCS
         ./src/viqo/managers/SceneManager.cpp
+        ./src/viqo/managers/GameObjectManager.cpp
+        ./src/viqo/gameworld/GameObject.cpp
         ./src/viqo/Scene.cpp
         ./src/viqo/scenes/TestScene.cpp
+        ./src/viqo/scenes/GameScene.cpp
         ./src/viqo/scenes/IntroScene.cpp
         ./src/viqo/main.cpp
 )
@@ -121,6 +127,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
         ${OGRE_INCLUDE_DIRS}
         ${CEGUI_INCLUDE_DIRS}
         ${CEGUI_OgreRenderer_INCLUDE_DIRS}
+        ${CMAKE_SOURCE_DIR}/include
 )
 
 add_executable(Viqo WIN32 ${HDRS} ${SRCS})

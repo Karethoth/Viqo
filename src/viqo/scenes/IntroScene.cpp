@@ -8,7 +8,7 @@ using namespace viqo::singletons;
 
 IntroScene::IntroScene()
 {
-  sceneLengthMs = 5000;
+  sceneLengthMs = 3000;
   timer = new Ogre::Timer();
 }
 
@@ -114,7 +114,7 @@ bool IntroScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
   {
     std::cout << "CHANGING SCENE!\n";
     SinSceneStack.Instance()->Pop();
-    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( "TestScene" ) );
+    SinSceneStack.Instance()->Push( SinSceneManager.Instance()->Get( "GameScene" ) );
     Stop();
     return false;
   }

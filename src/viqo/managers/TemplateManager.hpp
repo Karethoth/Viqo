@@ -56,6 +56,13 @@ namespace viqo
         items.erase(key);
         return ret;
       }
+
+
+
+      virtual std::map< std::string, boost::shared_ptr<T> > *GetPointer()
+      {
+        return &items;
+      }
     };
 
 

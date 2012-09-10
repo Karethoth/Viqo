@@ -1,4 +1,5 @@
 #include "scenes/TestScene.hpp"
+#include "scenes/GameScene.hpp"
 #include "scenes/IntroScene.hpp"
 #include "singletons/SinSceneManager.hpp"
 #include "singletons/SinSceneStack.hpp"
@@ -108,6 +109,12 @@ extern "C" {
     introScene->SetWindow( window );
     std::string sceneName( "IntroScene" );
     SinSceneManager.Instance()->Add( sceneName, introScene );
+
+    boost::shared_ptr<GameScene> gameScene( new GameScene() );
+    gameScene->SetRoot( root );
+    gameScene->SetWindow( window );
+    sceneName = std::string( "GameScene" );
+    SinSceneManager.Instance()->Add( sceneName, gameScene );
 
     boost::shared_ptr<TestScene> testScene( new TestScene() );
     testScene->SetRoot( root );
