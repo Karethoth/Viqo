@@ -4,10 +4,7 @@ using namespace viqo::gameworld;
 using std::string;
 
 
-GameObject::GameObject( Ogre::SceneManager *sceneManager )
-                      : sceneMan( sceneManager ),
-                        entity( NULL ),
-                        animationState( NULL )
+GameObject::GameObject()
 {
 }
 
@@ -24,14 +21,25 @@ GameObject::~GameObject()
 
 
 
+void GameObject::Init( Ogre::SceneManager *sceneManager,
+                       Ogre::SceneNode *sceneNode )
+{
+  sceneMan = sceneManager;
+  node     = sceneNode;
+  entity   = NULL;
+  animationState = NULL;
+}
+
+
+
 bool GameObject::Load( string objectName, string path )
 {
   name = objectName;
   entity = sceneMan->createEntity( objectName, path );
   entity->setCastShadows( true );
-  sceneMan->getRootSceneNode()->createChildSceneNode()->attachObject( entity );
+  node->attachObject( entity );
 
-  animationState = entity->getAnimationState( "Walk" );
+  animationState = entity->getAnimationState( "Idle2" );
   animationState->setLoop( true );
   animationState->setEnabled( true );
 
@@ -47,3 +55,4 @@ bool  GameObject::Update( Ogre::Real timeSinceLastFrame )
 
   return true;
 }
+

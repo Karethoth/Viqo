@@ -1,5 +1,6 @@
 #include "GameScene.hpp"
 #include <map>
+#include "../gameworld/MovableGameObject.hpp"
 
 using namespace viqo::scenes;
 using namespace viqo::gameworld;
@@ -27,16 +28,13 @@ void GameScene::CreateScene()
   mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
 
   // How game object management's supposed to work:
-  boost::shared_ptr<GameObject> goNinja( new GameObject( mSceneMgr ) );
+  boost::shared_ptr<GameObject> goNinja( new MovableGameObject() );
   string goNinjaName = "Ninja";
+  Ogre::SceneNode *ninjaNode = mSceneMgr->getRootSceneNode()->
+                               createChildSceneNode( goNinjaName+"Node" );
+  goNinja->Init( mSceneMgr, ninjaNode );
   goNinja->Load( goNinjaName, "ninja.mesh" );
   goManager.Add( goNinjaName, goNinja );
-
-  boost::shared_ptr<GameObject> goRobot( new GameObject( mSceneMgr ) );
-  string goRobotName = "Robot";
-  goRobot->Load( goRobotName, "robot.mesh" );
-  goManager.Add( goRobotName, goRobot );
-
 
   // And other stuff
   Ogre::Plane plane( Ogre::Vector3::UNIT_Y, 0 );

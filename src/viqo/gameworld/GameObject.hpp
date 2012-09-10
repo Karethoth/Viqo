@@ -5,7 +5,7 @@
 #include <OgreSceneManager.h>
 #include <OpenSteer/Vec3.h>
 
-using OpenSteer::Vec3;
+using Ogre::Vector3;
 
 
 namespace viqo
@@ -15,21 +15,24 @@ namespace viqo
     class GameObject
     {
      public:
-      Vec3 location;
-      Vec3 rotation;
-      Vec3 velocity;
-      Vec3 scale;
+      Vector3 location;
+      Vector3 rotation;
+      Vector3 velocity;
+      Vector3 scale;
 
       std::string name;
 
       Ogre::SceneManager *sceneMan;
+      Ogre::SceneNode *node;
       Ogre::Entity *entity;
       Ogre::AnimationState *animationState;
 
 
      public:
-      GameObject( Ogre::SceneManager* );
+      GameObject();
       virtual ~GameObject();
+
+      virtual void Init( Ogre::SceneManager*, Ogre::SceneNode* );
 
       virtual bool Load( std::string objectName, std::string path );
       virtual bool Update( Ogre::Real );

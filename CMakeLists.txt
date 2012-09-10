@@ -105,6 +105,7 @@ set(HDRS
         ./src/viqo/singletons/SinSceneManager.hpp
         ./src/viqo/stacks/TemplateStack.hpp
         ./src/viqo/singletons/SinSceneStack.hpp
+        ./src/viqo/gameworld/MovableGameObject.hpp
         ./src/viqo/gameworld/GameObject.hpp
         ./src/viqo/Scene.hpp
         ./src/viqo/scenes/TestScene.hpp
@@ -115,6 +116,7 @@ set(HDRS
 set(SRCS
         ./src/viqo/managers/SceneManager.cpp
         ./src/viqo/managers/GameObjectManager.cpp
+        ./src/viqo/gameworld/MovableGameObject.cpp
         ./src/viqo/gameworld/GameObject.cpp
         ./src/viqo/Scene.cpp
         ./src/viqo/scenes/TestScene.cpp
