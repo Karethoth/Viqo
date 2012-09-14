@@ -18,6 +18,8 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
   DestroyScene();
+  if( cam )
+    delete cam;
 }
 
 
@@ -64,7 +66,33 @@ void GameScene::CreateScene()
   pointLight2->setSpecularColour( 1.0, 0.0, 1.0 );
 }
 
-/*
+
+
+void GameScene::CreateCamera()
+{
+  cam = new GameCamera( mSceneMgr );
+
+  cam->GetCamera()->setPosition( Ogre::Vector3( 0,100,500 ) );
+
+  cam->GetCamera()->lookAt( Ogre::Vector3( 0,0,0 ) );
+  cam->GetCamera()->setNearClipDistance( 5 );
+}
+
+
+
+void GameScene::CreateViewports()
+{
+  // Create one viewport, entire window
+  Ogre::Viewport* vp = mWindow->addViewport( cam->GetCamera() );
+  vp->setBackgroundColour( Ogre::ColourValue( 0,0,0 ) );
+
+  // Alter the camera aspect ratio to match the viewport
+  cam->GetCamera()->setAspectRatio
+  (
+    Ogre::Real( vp->getActualWidth() ) / Ogre::Real( vp->getActualHeight() )
+  );
+}
+
 
 
 void GameScene::DestroyScene()
@@ -75,31 +103,56 @@ void GameScene::DestroyScene()
 
 void GameScene::CreateFrameListener()
 {
-  Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
+  Ogre::LogManager::getSingletonPtr()->logMessage( "*** Initializing OIS ***" );
   OIS::ParamList pl;
   size_t windowHnd = 0;
   std::ostringstream windowHndStr;
 
-  mWindow->getCustomAttribute("WINDOW", &windowHnd);
+  mWindow->getCustomAttribute( "WINDOW", &windowHnd );
   windowHndStr << windowHnd;
-  pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+  pl.insert( std::make_pair( std::string("WINDOW"), windowHndStr.str() ) );
 
   mInputManager = OIS::InputManager::createInputSystem( pl );
 
-  mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
-  mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
+  mKeyboard = static_cast<OIS::Keyboard*>( mInputManager->createInputObject( OIS::OISKeyboard, true ) );
+  mMouse = static_cast<OIS::Mouse*>( mInputManager->createInputObject( OIS::OISMouse, true ) );
 
-  mMouse->setEventCallback(this);
-  mKeyboard->setEventCallback(this);
+  mMouse->setEventCallback( this );
+  mKeyboard->setEventCallback( this );
+
+  //Set initial mouse clipping size
+  windowResized( mWindow );
 
   //Register as a Window listener
-  Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
+  Ogre::WindowEventUtilities::addWindowEventListener( mWindow, this );
 
-  mRoot->addFrameListener(this);
+  mTrayMgr = new OgreBites::SdkTrayManager( "InterfaceName", mWindow, mMouse, (OgreBites::SdkTrayListener*)this );
+  mTrayMgr->showFrameStats( OgreBites::TL_TOPLEFT );
+  mTrayMgr->hideCursor();
+
+  // create a params panel for displaying sample details
+  Ogre::StringVector items;
+  items.push_back( "cam.pX" );
+  items.push_back( "cam.pY" );
+  items.push_back( "cam.pZ" );
+  items.push_back( "" );
+  items.push_back( "cam.oW" );
+  items.push_back( "cam.oX" );
+  items.push_back( "cam.oY" );
+  items.push_back( "cam.oZ" );
+  items.push_back( "" );
+  items.push_back( "Filtering" );
+  items.push_back( "Poly Mode" );
+
+  mDetailsPanel = mTrayMgr->createParamsPanel( OgreBites::TL_NONE, "DetailsPanel", 200, items );
+  mDetailsPanel->setParamValue( 9, "Bilinear" );
+  mDetailsPanel->setParamValue( 10, "Solid" );
+  mDetailsPanel->hide();
+
+  mRoot->addFrameListener( this );
 }
 
 
-*/
 
 bool GameScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
 {
@@ -126,34 +179,62 @@ bool GameScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
     (*gosIt).second->Update( evt.timeSinceLastFrame );
   }
 
+  cam->Update();
   mTrayMgr->frameRenderingQueued( evt );
 
   if( !mTrayMgr->isDialogVisible() )
   {
-    mCameraMan->frameRenderingQueued( evt );   // if dialog isn't up, then update the camera
-    if( mDetailsPanel->isVisible() )   // if details panel is visible, then update its contents
+    if( mDetailsPanel->isVisible() )
     {
-      mDetailsPanel->setParamValue( 0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x) );
-      mDetailsPanel->setParamValue( 1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y) );
-      mDetailsPanel->setParamValue( 2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z) );
-      mDetailsPanel->setParamValue( 4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w) );
-      mDetailsPanel->setParamValue( 5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x) );
-      mDetailsPanel->setParamValue( 6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y) );
-      mDetailsPanel->setParamValue( 7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z) );
+      mDetailsPanel->setParamValue( 0, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedPosition().x) );
+      mDetailsPanel->setParamValue( 1, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedPosition().y) );
+      mDetailsPanel->setParamValue( 2, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedPosition().z) );
+      mDetailsPanel->setParamValue( 4, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedOrientation().w) );
+      mDetailsPanel->setParamValue( 5, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedOrientation().x) );
+      mDetailsPanel->setParamValue( 6, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedOrientation().y) );
+      mDetailsPanel->setParamValue( 7, Ogre::StringConverter::toString(cam->GetCamera()->getDerivedOrientation().z) );
     }
   }
 
   return true;
 }
 
-/*
 
 
 bool GameScene::keyPressed( const OIS::KeyEvent &arg )
 {
-  CEGUI::System &sys = CEGUI::System::getSingleton();
-  sys.injectKeyDown(arg.key);
-  sys.injectChar(arg.text);
+  cam->keyPressed( arg );
+
+  if( arg.key == OIS::KC_F )   // toggle visibility of advanced frame stats
+  {
+    mTrayMgr->toggleAdvancedFrameStats();
+  }
+  else if( arg.key == OIS::KC_G )   // toggle visibility of even rarer debugging details
+  {
+    if( mDetailsPanel->getTrayLocation() == OgreBites::TL_NONE )
+    {
+      mTrayMgr->moveWidgetToTray( mDetailsPanel, OgreBites::TL_TOPRIGHT, 0 );
+      mDetailsPanel->show();
+    }
+    else
+    {
+      mTrayMgr->removeWidgetFromTray( mDetailsPanel );
+      mDetailsPanel->hide();
+    }
+  }
+  else if( arg.key == OIS::KC_F5 )   // refresh all textures
+  {
+    Ogre::TextureManager::getSingleton().reloadAll();
+  }
+  else if( arg.key == OIS::KC_SYSRQ )   // take a screenshot
+  {
+    mWindow->writeContentsToTimestampedFile( "screenshot", ".jpg" );
+  }
+  else if( arg.key == OIS::KC_ESCAPE )
+  {
+    mShutDown = true;
+  }
+
   return true;
 }
 
@@ -161,7 +242,7 @@ bool GameScene::keyPressed( const OIS::KeyEvent &arg )
 
 bool GameScene::keyReleased( const OIS::KeyEvent &arg )
 {
-  CEGUI::System::getSingleton().injectKeyUp(arg.key);
+  cam->keyReleased( arg );
   return true;
 }
 
@@ -169,7 +250,7 @@ bool GameScene::keyReleased( const OIS::KeyEvent &arg )
 
 bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-  CEGUI::System::getSingleton().injectMouseButtonDown( ConvertButton( id ) );
+  cam->mousePressed( arg, id );
   return true;
 }
 
@@ -177,7 +258,7 @@ bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id 
 
 bool GameScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-  CEGUI::System::getSingleton().injectMouseButtonUp( ConvertButton( id ) );
+  cam->mouseReleased( arg, id );
   return true;
 }
 
@@ -185,13 +266,7 @@ bool GameScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id
 
 bool GameScene::mouseMoved( const OIS::MouseEvent &arg )
 {
-  CEGUI::System &sys = CEGUI::System::getSingleton();
-  sys.injectMouseMove( arg.state.X.rel, arg.state.Y.rel );
-
-  if( arg.state.Z.rel )
-    sys.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
-
+  cam->mouseMoved( arg );
   return true;
 }
-*/
 

@@ -8,5 +8,6 @@ tags
 *.swp
 deps*
 objs*
-.svn
+*.svn
 lib
+*.swo
