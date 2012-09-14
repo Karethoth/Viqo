@@ -30,7 +30,7 @@ namespace viqo
 
     Ogre::Camera *GetCamera();
 
-    void Update();
+    void Update( Ogre::Real );
 
     virtual bool keyPressed( const OIS::KeyEvent &arg );
     virtual bool keyReleased( const OIS::KeyEvent &arg );

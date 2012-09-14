@@ -179,7 +179,7 @@ bool GameScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
     (*gosIt).second->Update( evt.timeSinceLastFrame );
   }
 
-  cam->Update();
+  cam->Update( evt.timeSinceLastFrame );
   mTrayMgr->frameRenderingQueued( evt );
 
   if( !mTrayMgr->isDialogVisible() )
