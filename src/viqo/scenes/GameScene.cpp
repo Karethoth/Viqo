@@ -293,7 +293,8 @@ bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id 
       if( goNinja )
       {
         boost::shared_ptr<MovableGameObject> ninja = boost::static_pointer_cast<MovableGameObject>( goNinja );
-        ninja->walkList.push_back( itr->movable->getParentSceneNode()->getPosition() );
+        Ogre::Vector3 pos = itr->movable->getParentSceneNode()->getPosition();
+        ninja->walkList.push_back( Ogre::Vector3(pos.x,0,pos.z) );
       }
     }
 
