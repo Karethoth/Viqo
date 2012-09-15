@@ -18,10 +18,15 @@ namespace viqo
     Ogre::SceneNode    *camNode;
     Ogre::SceneManager *sceneMan;
 
-    Ogre::Vector3 location;
     Ogre::Vector3 velocity;
+    Ogre::Real turnVelocity;
 
-    bool upKey, downKey, rightKey, leftKey;
+    bool upKey,
+         downKey,
+         rightKey,
+         leftKey,
+         turnLeftKey,
+         turnRightKey;
 
 
    public:

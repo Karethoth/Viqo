@@ -72,7 +72,7 @@ void GameScene::CreateCamera()
 {
   cam = new GameCamera( mSceneMgr );
 
-  cam->GetCamera()->setPosition( Ogre::Vector3( 0,100,500 ) );
+  cam->GetCamera()->setPosition( Ogre::Vector3( 0,300,900 ) );
 
   cam->GetCamera()->lookAt( Ogre::Vector3( 0,0,0 ) );
   cam->GetCamera()->setNearClipDistance( 5 );

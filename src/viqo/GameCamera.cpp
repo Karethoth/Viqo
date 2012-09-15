@@ -15,6 +15,10 @@ GameCamera::GameCamera( Ogre::SceneManager *sMan )
   downKey  = false;
   leftKey  = false;
   rightKey = false;
+  turnLeftKey  = false;
+  turnRightKey = false;
+
+  velocity = Ogre::Vector3( 0,0,0 );
 }
 
 
@@ -37,6 +41,10 @@ Ogre::Camera *GameCamera::GetCamera()
 
 void GameCamera::Update( Ogre::Real timeSinceLastFrame )
 {
+  velocity.x *= 0.9;
+  velocity.z *= 0.9;
+  velocity.y *= 0.9;
+
   if( upKey )
     velocity.z -= 5.0;
   if( downKey )
@@ -46,13 +54,34 @@ void GameCamera::Update( Ogre::Real timeSinceLastFrame )
   if( leftKey )
     velocity.x -= 5.0;
 
-  velocity.x *= 0.9;
-  velocity.z *= 0.9;
-  velocity.y *= 0.98;
+  turnVelocity *= 0.8;
 
-  cam->pitch( Ogre::Radian( Ogre::Degree( -velocity.y/10 ) ) );
+  if( turnRightKey )
+    turnVelocity += 1.0;
+  if( turnLeftKey )
+    turnVelocity -= 1.0;
 
-  camNode->translate( velocity );
+  Ogre::Degree pitch    = Ogre::Degree( -velocity.y/20 );
+  Ogre::Degree curPitch = Ogre::Degree( cam->getOrientation().getPitch() );
+  if( pitch + curPitch >= Ogre::Degree( -70.0 ) &&
+      pitch + curPitch <= Ogre::Degree( -10.0 ) &&
+      camNode->getPosition().y >= 100 &&
+      camNode->getPosition().y <= 1000 )
+  {
+    cam->pitch( Ogre::Radian( pitch ) );
+  }
+
+  if( camNode->getPosition().y + velocity.y >= 0 &&
+      camNode->getPosition().y + velocity.y <= 2000 )
+    camNode->translate( 0, velocity.y, 0, Ogre::Node::TS_LOCAL );
+
+  if( turnVelocity >= 1.0 || turnVelocity <= -1.0 )
+    camNode->yaw( Ogre::Radian( Ogre::Degree( turnVelocity ) ) );
+
+  if( velocity.length() >= 1.0 )
+  {
+    camNode->translate( velocity.x, 0, velocity.z, Ogre::Node::TS_LOCAL );
+  }
 }
 
 
@@ -79,6 +108,14 @@ bool GameCamera::keyPressed( const OIS::KeyEvent &arg )
     case( OIS::KC_LEFT ):
     case( OIS::KC_A ):
       leftKey = true;
+      break;
+
+    case( OIS::KC_Q ):
+      turnRightKey = true;
+      break;
+
+    case( OIS::KC_E ):
+      turnLeftKey = true;
       break;
   }
   return true;
@@ -109,6 +146,14 @@ bool GameCamera::keyReleased( const OIS::KeyEvent &arg )
     case( OIS::KC_A ):
       leftKey = false;
       break;
+
+    case( OIS::KC_Q ):
+      turnRightKey = false;
+      break;
+
+    case( OIS::KC_E ):
+      turnLeftKey = false;
+      break;
   }
 
   return true;
@@ -119,7 +164,7 @@ bool GameCamera::keyReleased( const OIS::KeyEvent &arg )
 bool GameCamera::mouseMoved( const OIS::MouseEvent &arg )
 {
   if( arg.state.Z.rel )
-    velocity.y -= arg.state.Z.rel/120;
+    velocity.y -= 5*arg.state.Z.rel/120;
 
   return true;
 }
