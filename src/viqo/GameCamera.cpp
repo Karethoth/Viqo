@@ -73,7 +73,9 @@ void GameCamera::Update( Ogre::Real timeSinceLastFrame )
 
   if( camNode->getPosition().y + velocity.y >= 0 &&
       camNode->getPosition().y + velocity.y <= 2000 )
+  {
     camNode->translate( 0, velocity.y, 0, Ogre::Node::TS_LOCAL );
+  }
 
   if( turnVelocity >= 1.0 || turnVelocity <= -1.0 )
     camNode->yaw( Ogre::Radian( Ogre::Degree( turnVelocity ) ) );

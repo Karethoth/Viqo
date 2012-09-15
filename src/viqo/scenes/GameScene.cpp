@@ -26,6 +26,22 @@ GameScene::~GameScene()
 
 void GameScene::CreateScene()
 {
+  mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+  CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
+  CEGUI::Font::setDefaultResourceGroup("Fonts");
+  CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+  CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+  CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+  CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
+  CEGUI::System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
+
+  CEGUI::MouseCursor::getSingleton().setImage( "TaharezLook", "MouseArrow" );
+
+  //CEGUI::Window *guiRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout("TextDemo.layout");
+  //CEGUI::System::getSingleton().setGUISheet(guiRoot);
+
+
   mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
   mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
 
@@ -203,6 +219,9 @@ bool GameScene::frameRenderingQueued( const Ogre::FrameEvent &evt )
 
 bool GameScene::keyPressed( const OIS::KeyEvent &arg )
 {
+  CEGUI::System &sys = CEGUI::System::getSingleton();
+  sys.injectKeyDown(arg.key);
+  sys.injectChar(arg.text);
   cam->keyPressed( arg );
 
   if( arg.key == OIS::KC_F )   // toggle visibility of advanced frame stats
@@ -250,6 +269,7 @@ bool GameScene::keyReleased( const OIS::KeyEvent &arg )
 
 bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
+  CEGUI::System::getSingleton().injectMouseButtonDown( ConvertButton( id ) );
   cam->mousePressed( arg, id );
   return true;
 }
@@ -258,6 +278,7 @@ bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id 
 
 bool GameScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
+  CEGUI::System::getSingleton().injectMouseButtonUp( ConvertButton( id ) );
   cam->mouseReleased( arg, id );
   return true;
 }
@@ -266,6 +287,12 @@ bool GameScene::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id
 
 bool GameScene::mouseMoved( const OIS::MouseEvent &arg )
 {
+  CEGUI::System &sys = CEGUI::System::getSingleton();
+  sys.injectMouseMove( arg.state.X.rel, arg.state.Y.rel );
+
+  if( arg.state.Z.rel )
+    sys.injectMouseWheelChange(arg.state.Z.rel / 120.0f);
+
   cam->mouseMoved( arg );
   return true;
 }
