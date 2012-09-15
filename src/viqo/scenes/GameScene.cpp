@@ -271,6 +271,34 @@ bool GameScene::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id 
 {
   CEGUI::System::getSingleton().injectMouseButtonDown( ConvertButton( id ) );
   cam->mousePressed( arg, id );
+
+  if( id == OIS::MB_Right )
+  {
+    CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+    Ogre::Ray mouseRay    = cam->GetCamera()->getCameraToViewportRay
+    (
+      mousePos.d_x/float(arg.state.width),
+      mousePos.d_y/float(arg.state.height)
+    );
+
+    Ogre::RaySceneQuery *rayQuery;
+    rayQuery = mSceneMgr->createRayQuery( mouseRay );
+
+    Ogre::RaySceneQueryResult &result = rayQuery->execute();
+    Ogre::RaySceneQueryResult::iterator itr = result.begin();
+
+    if( itr != result.end() )
+    {
+      boost::shared_ptr<GameObject> goNinja = goManager.Get( "Ninja" );
+      if( goNinja )
+      {
+        boost::shared_ptr<MovableGameObject> ninja = boost::static_pointer_cast<MovableGameObject>( goNinja );
+        ninja->walkList.push_back( itr->movable->getParentSceneNode()->getPosition() );
+      }
+    }
+
+    delete rayQuery;
+  }
   return true;
 }
 
