@@ -3,11 +3,13 @@
 #include "scenes/IntroScene.hpp"
 #include "singletons/SinSceneManager.hpp"
 #include "singletons/SinSceneStack.hpp"
+#include "gameworld/GameRoadGraph.hpp"
 
 using namespace viqo;
 using namespace viqo::managers;
 using namespace viqo::singletons;
 using namespace viqo::scenes;
+using namespace viqo::gameworld;
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -33,6 +35,53 @@ extern "C" {
   int main(int argc, char *argv[])
 #endif
   {
+    std::vector<GameRoadGraph*> roadGraphs;
+    GameRoadGraph *a = new GameRoadGraph( GenerateRoadGraphId() );
+    GameRoadGraph *b = new GameRoadGraph( GenerateRoadGraphId() );
+    GameRoadGraph *c = new GameRoadGraph( GenerateRoadGraphId() );
+    GameRoadGraph *d = new GameRoadGraph( GenerateRoadGraphId() );
+    
+    roadGraphs.push_back( a );
+    roadGraphs.push_back( b );
+    roadGraphs.push_back( c );
+    roadGraphs.push_back( d );
+
+    a->AddChild( b );
+    a->AddChild( c );
+    b->AddChild( d );
+    c->AddChild( d );
+
+    d->AddParent( b );
+    d->AddParent( c );
+    c->AddParent( a );
+    b->AddParent( a );
+
+
+    Divide( a, b, c, d, &roadGraphs );
+
+    std::vector<GameRoadGraph*>::iterator it;
+    std::vector<GameRoadGraph*>::iterator sit;
+    for( it = roadGraphs.begin(); it != roadGraphs.end(); ++it )
+    {
+      printf( "\n----------------\n" );
+      printf( "| ROADGRAPH %d\n", (*it)->id );
+      printf( "----------------\n" );
+
+      printf( "\tPARENTS:\n" );
+      for( sit = (*it)->parents.begin(); sit != (*it)->parents.end(); ++sit )
+      {
+        printf( "\t\t%d\n", (*sit)->id );
+      }
+
+      printf( "\tCHILDREN:\n" );
+      for( sit = (*it)->children.begin(); sit != (*it)->children.end(); ++sit )
+      {
+        printf( "\t\t%d\n", (*sit)->id );
+      }
+    }
+    return 0;
+
+
     Ogre::String resourcesCfg = "assets/config/resources.cfg";
     Ogre::String pluginsCfg  = "assets/config/plugins.cfg";
 
