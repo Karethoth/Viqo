@@ -37,6 +37,7 @@ extern "C" {
     Ogre::String pluginsCfg  = "assets/config/plugins.cfg";
 
     boost::shared_ptr<Ogre::Root> root( new Ogre::Root( pluginsCfg ) );
+
     Ogre::RenderWindow *window = Configure( root );
     SetupResources( resourcesCfg );
 

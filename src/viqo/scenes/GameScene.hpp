@@ -5,6 +5,7 @@
 #include "../GameCamera.hpp"
 #include "../managers/GameObjectManager.hpp"
 #include "../gameworld/GameObject.hpp"
+#include "../gameworld/GameTerrain.hpp"
 
 
 namespace viqo
@@ -30,6 +31,7 @@ namespace viqo
 
       viqo::managers::GameObjectManager goManager;
       viqo::GameCamera                 *cam;
+      viqo::gameworld::GameTerrain     *gameTerrain;
 
 
      public:

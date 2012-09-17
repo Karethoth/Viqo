@@ -1,0 +1,6 @@
+#ifndef __VIQO_GAMEWORLD_GAMEWORLD_HPP__
+#define __VIQO_GAMEWORLD_GAMEWORLD_HPP__
+
+
+#endif
+

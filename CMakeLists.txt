@@ -56,6 +56,12 @@ if(NOT OIS_FOUND)
   message(SEND_ERROR "Failed to find OIS.")
 endif()
 
+if(OGRE_Terrain_FOUND)
+  set( OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Terrain_LIBRARIES})
+else(OGRE_Terrain_FOUND)
+  message(SEND_ERROR "OgreTerrain Library not found.")
+endif(OGRE_Terrain_FOUND)
+
 # Find Boost
 if (NOT OGRE_BUILD_PLATFORM_IPHONE)
         if (WIN32 OR APPLE)
@@ -107,6 +113,7 @@ set(HDRS
         ./src/viqo/singletons/SinSceneStack.hpp
         ./src/viqo/gameworld/MovableGameObject.hpp
         ./src/viqo/gameworld/GameObject.hpp
+        ./src/viqo/gameworld/GameTerrain.hpp
         ./src/viqo/GameCamera.hpp
         ./src/viqo/Scene.hpp
         ./src/viqo/scenes/TestScene.hpp
@@ -119,6 +126,7 @@ set(SRCS
         ./src/viqo/managers/GameObjectManager.cpp
         ./src/viqo/gameworld/MovableGameObject.cpp
         ./src/viqo/gameworld/GameObject.cpp
+        ./src/viqo/gameworld/GameTerrain.cpp
         ./src/viqo/GameCamera.cpp
         ./src/viqo/Scene.cpp
         ./src/viqo/scenes/TestScene.cpp

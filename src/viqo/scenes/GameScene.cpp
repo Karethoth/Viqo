@@ -26,6 +26,8 @@ GameScene::~GameScene()
 
 void GameScene::CreateScene()
 {
+  gameTerrain = new viqo::gameworld::GameTerrain( mSceneMgr );
+
   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
   CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
   CEGUI::Font::setDefaultResourceGroup("Fonts");
@@ -42,8 +44,8 @@ void GameScene::CreateScene()
   //CEGUI::System::getSingleton().setGUISheet(guiRoot);
 
 
-  mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
-  mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
+  //mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
+  //mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
 
   // How game object management's supposed to work:
   boost::shared_ptr<GameObject> goNinja( new MovableGameObject() );
@@ -55,31 +57,31 @@ void GameScene::CreateScene()
   goManager.Add( goNinjaName, goNinja );
 
   // And other stuff
-  Ogre::Plane plane( Ogre::Vector3::UNIT_Y, 0 );
+  //Ogre::Plane plane( Ogre::Vector3::UNIT_Y, 0 );
 
-  Ogre::MeshManager::getSingleton().createPlane( "ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                                 plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z );
+  //Ogre::MeshManager::getSingleton().createPlane( "ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                                                 //plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z );
 
-  Ogre::Entity *entGround = mSceneMgr->createEntity( "GroundEntity", "ground" );
-  mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject( entGround );
+  //Ogre::Entity *entGround = mSceneMgr->createEntity( "GroundEntity", "ground" );
+  //mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject( entGround );
 
-  entGround->setMaterialName( "Examples/Rockwall" );
-  entGround->setCastShadows( false );
+  //entGround->setMaterialName( "Examples/Rockwall" );
+  //entGround->setCastShadows( false );
 
-  Ogre::Light* pointLight = mSceneMgr->createLight( "pointLight" );
-  pointLight->setType( Ogre::Light::LT_POINT );
-  pointLight->setPosition( Ogre::Vector3(0, 150, 250) );
+  //Ogre::Light* pointLight = mSceneMgr->createLight( "pointLight" );
+  //pointLight->setType( Ogre::Light::LT_POINT );
+  //pointLight->setPosition( Ogre::Vector3(0, 150, 250) );
 
-  pointLight->setDiffuseColour( 1.0, 0.0, 0.0 );
-  pointLight->setSpecularColour( 1.0, 0.0, 0.0 );
+  //pointLight->setDiffuseColour( 1.0, 0.0, 0.0 );
+  //pointLight->setSpecularColour( 1.0, 0.0, 0.0 );
 
 
-  Ogre::Light* pointLight2 = mSceneMgr->createLight( "pointLight2" );
-  pointLight2->setType( Ogre::Light::LT_POINT );
-  pointLight2->setPosition( Ogre::Vector3(20, 150, -250) );
+  //Ogre::Light* pointLight2 = mSceneMgr->createLight( "pointLight2" );
+  //pointLight2->setType( Ogre::Light::LT_POINT );
+  //pointLight2->setPosition( Ogre::Vector3(20, 150, -250) );
 
-  pointLight2->setDiffuseColour( 1.0, 0.0, 1.0 );
-  pointLight2->setSpecularColour( 1.0, 0.0, 1.0 );
+  //pointLight2->setDiffuseColour( 1.0, 0.0, 1.0 );
+  //pointLight2->setSpecularColour( 1.0, 0.0, 1.0 );
 }
 
 
