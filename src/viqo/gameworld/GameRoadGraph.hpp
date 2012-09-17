@@ -87,49 +87,23 @@ namespace viqo
       GameRoadGraph *d;
 
 
-
-      GameRoadGraphArea()
-      {
-        a = NULL;
-        b = NULL;
-        c = NULL;
-        d = NULL;
-      }
-
-
-
+      // Initializers
+      GameRoadGraphArea();
       GameRoadGraphArea( GameRoadGraph *A,
                          GameRoadGraph *B,
                          GameRoadGraph *C,
-                         GameRoadGraph *D )
-      {
-        Init( A, B, C, D );
-      }
-
-
+                         GameRoadGraph *D );
 
       void Init( GameRoadGraph *A,
                  GameRoadGraph *B,
                  GameRoadGraph *C,
-                 GameRoadGraph *D )
-      {
-        a = A;
-        b = B;
-        c = C;
-        d = D;
-      }
+                 GameRoadGraph *D );
 
+      // Swaps places of B and C.
+      // Used when wanted to divide area by other axis.
+      void Rotate();
 
-
-      void Rotate()
-      {
-        GameRoadGraph *tmp;
-        tmp = c;
-        c   = b;
-        b   = tmp;
-      }
-
-      
+      // Divides area, returns a pointer to GameRoadGraphArea[2].
       GameRoadGraphArea *Divide( std::vector<GameRoadGraph*> *graphs );
     };
 

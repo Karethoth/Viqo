@@ -7,6 +7,49 @@ long int roadGraphCounter=0;
 
 
 
+GameRoadGraphArea::GameRoadGraphArea()
+{
+  a = NULL;
+  b = NULL;
+  c = NULL;
+  d = NULL;
+}
+
+
+
+GameRoadGraphArea::GameRoadGraphArea( GameRoadGraph *A,
+                                      GameRoadGraph *B,
+                                      GameRoadGraph *C,
+                                      GameRoadGraph *D )
+{
+  Init( A, B, C, D );
+}
+
+
+
+void GameRoadGraphArea::Init( GameRoadGraph *A,
+                              GameRoadGraph *B,
+                              GameRoadGraph *C,
+                              GameRoadGraph *D )
+{
+  a = A;
+  b = B;
+  c = C;
+  d = D;
+}
+
+
+
+void GameRoadGraphArea::Rotate()
+{
+  GameRoadGraph *tmp;
+  tmp = c;
+  c   = b;
+  b   = tmp;
+}
+
+
+
 GameRoadGraphArea *GameRoadGraphArea::Divide( std::vector<GameRoadGraph*> *graphs )
 {
   a->BreakConnection( b );
