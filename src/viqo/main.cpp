@@ -40,6 +40,11 @@ extern "C" {
     GameRoadGraph *b = new GameRoadGraph( GenerateRoadGraphId() );
     GameRoadGraph *c = new GameRoadGraph( GenerateRoadGraphId() );
     GameRoadGraph *d = new GameRoadGraph( GenerateRoadGraphId() );
+
+    a->location = Ogre::Vector3( 0, 0, 0 );
+    b->location = Ogre::Vector3( 100, 0, 0 );
+    c->location = Ogre::Vector3( 0, 0, 100 );
+    d->location = Ogre::Vector3( 100, 0, 100 );
     
     roadGraphs.push_back( a );
     roadGraphs.push_back( b );
@@ -64,7 +69,7 @@ extern "C" {
     for( it = roadGraphs.begin(); it != roadGraphs.end(); ++it )
     {
       printf( "\n----------------\n" );
-      printf( "| ROADGRAPH %d\n", (*it)->id );
+      printf( "| ROADGRAPH %d X:%f Z:%f\n", (*it)->id, (*it)->location.x, (*it)->location.z );
       printf( "----------------\n" );
 
       printf( "\tPARENTS:\n" );

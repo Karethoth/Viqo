@@ -19,6 +19,12 @@ void viqo::gameworld::Divide( GameRoadGraph *a,
   GameRoadGraph *e = new GameRoadGraph( GenerateRoadGraphId() );
   GameRoadGraph *f = new GameRoadGraph( GenerateRoadGraphId() );
 
+  e->location.x = (a->location.x + b->location.x) / 2.0;
+  e->location.z = (a->location.z + b->location.z) / 2.0;
+
+  f->location.x = (c->location.x + d->location.x) / 2.0;
+  f->location.z = (c->location.z + d->location.z) / 2.0;
+
   graphs->push_back( e );
   graphs->push_back( f );
 
