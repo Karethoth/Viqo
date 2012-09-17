@@ -51,6 +51,7 @@ extern "C" {
     roadGraphs.push_back( c );
     roadGraphs.push_back( d );
 
+
     a->AddChild( b );
     a->AddChild( c );
     b->AddChild( d );
@@ -61,8 +62,11 @@ extern "C" {
     c->AddParent( a );
     b->AddParent( a );
 
+    GameRoadGraphArea roadArea( a, b, c, d );
 
-    Divide( a, b, c, d, &roadGraphs );
+    GameRoadGraphArea *subAreas = roadArea.Divide( &roadGraphs );
+    subAreas[1].Rotate();
+    subAreas[1].Divide( &roadGraphs );
 
     std::vector<GameRoadGraph*>::iterator it;
     std::vector<GameRoadGraph*>::iterator sit;

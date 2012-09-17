@@ -79,6 +79,62 @@ namespace viqo
 
 
 
+    struct GameRoadGraphArea
+    {
+      GameRoadGraph *a;
+      GameRoadGraph *b;
+      GameRoadGraph *c;
+      GameRoadGraph *d;
+
+
+
+      GameRoadGraphArea()
+      {
+        a = NULL;
+        b = NULL;
+        c = NULL;
+        d = NULL;
+      }
+
+
+
+      GameRoadGraphArea( GameRoadGraph *A,
+                         GameRoadGraph *B,
+                         GameRoadGraph *C,
+                         GameRoadGraph *D )
+      {
+        Init( A, B, C, D );
+      }
+
+
+
+      void Init( GameRoadGraph *A,
+                 GameRoadGraph *B,
+                 GameRoadGraph *C,
+                 GameRoadGraph *D )
+      {
+        a = A;
+        b = B;
+        c = C;
+        d = D;
+      }
+
+
+
+      void Rotate()
+      {
+        GameRoadGraph *tmp;
+        tmp = c;
+        c   = b;
+        b   = tmp;
+      }
+
+      
+      GameRoadGraphArea *Divide( std::vector<GameRoadGraph*> *graphs );
+    };
+
+
+
     static long int GenerateRoadGraphId()
     {
       return roadGraphCounter++;
@@ -86,11 +142,6 @@ namespace viqo
 
 
 
-    void Divide( GameRoadGraph *a,
-                 GameRoadGraph *b,
-                 GameRoadGraph *c,
-                 GameRoadGraph *d,
-                 std::vector<GameRoadGraph*> *graphs );
   }
 }
 

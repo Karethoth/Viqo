@@ -7,11 +7,7 @@ long int roadGraphCounter=0;
 
 
 
-void viqo::gameworld::Divide( GameRoadGraph *a,
-                              GameRoadGraph *b,
-                              GameRoadGraph *c,
-                              GameRoadGraph *d,
-                              std::vector<GameRoadGraph*> *graphs )
+GameRoadGraphArea *GameRoadGraphArea::Divide( std::vector<GameRoadGraph*> *graphs )
 {
   a->BreakConnection( b );
   c->BreakConnection( d );
@@ -47,5 +43,10 @@ void viqo::gameworld::Divide( GameRoadGraph *a,
   // F <-> D
   f->AddChild( d );
   d->AddParent( f );
+
+  GameRoadGraphArea *ret = new GameRoadGraphArea[2];
+  ret[0].Init( a, e, c, f );
+  ret[1].Init( e, b, f, d );
+  return ret;
 }
 
