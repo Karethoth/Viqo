@@ -1,5 +1,8 @@
 #include "GameTerrain.hpp"
 
+#include <sstream>
+#include <OgreStaticGeometry.h>
+
 using namespace viqo::gameworld;
 
 
@@ -8,6 +11,41 @@ GameTerrain::GameTerrain( Ogre::SceneManager *sceneManager )
   sceneMan = sceneManager;
   terrainImported = false;
 
+  roadSys.Generate();
+  roadSys.Print();
+
+  std::vector<GameRoadGraph*> *graphs = roadSys.GetGraphs();
+  std::vector<GameRoadGraph*>::iterator it;
+
+  Ogre::Entity    *ent;
+  Ogre::SceneNode *node;
+
+  ent = sceneMan->createEntity( "Knot", "knot.mesh" );
+  Ogre::StaticGeometry *sg = sceneMan->createStaticGeometry( "Knots" );
+
+  sg->setRegionDimensions( Ogre::Vector3( 1000.0, 1000.0, 1000.0 ) );
+  sg->setOrigin( Ogre::Vector3( -500.0, -500.0, -500.0 ) );
+
+  int counter=0;
+  Ogre::Vector3 scaler = Ogre::Vector3( 0.1, 0.1, 0.1 );
+  for( it = graphs->begin(); it != graphs->end(); ++it )
+  {
+    std::string entName = "Intersection";
+    std::stringstream stream;
+    stream << counter++;
+    entName.append( stream.str() );
+
+    Ogre::Quaternion q;
+    q.FromAngleAxis( Ogre::Degree( 0 ), Ogre::Vector3::UNIT_Y ),
+    sg->addEntity( ent,
+                   (*it)->location*100,
+                   q,
+                   scaler );
+  }
+
+  sg->build();
+
+  /*
   Ogre::Vector3 lightDir( 0.55, -0.3, 0.75 );
 
   Ogre::Light* light = sceneMan->createLight("tstLight");
@@ -43,6 +81,7 @@ GameTerrain::GameTerrain( Ogre::SceneManager *sceneManager )
   }
 
   terrainGroup->freeTemporaryResources();
+  */
 }
 
 

@@ -93,3 +93,20 @@ GameRoadGraphArea *GameRoadGraphArea::Divide( std::vector<GameRoadGraph*> *graph
   return ret;
 }
 
+
+
+GameRoadGraphAreaTreeNode::GameRoadGraphAreaTreeNode( GameRoadGraphArea *a )
+{
+  area = a;
+  children[0] = NULL;
+  children[1] = NULL;
+}
+
+
+void GameRoadGraphAreaTreeNode::SetChildren( GameRoadGraphAreaTreeNode *a,
+                                        GameRoadGraphAreaTreeNode *b )
+{
+  children[0] = a;
+  children[1] = b;
+}
+

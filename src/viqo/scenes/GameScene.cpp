@@ -26,7 +26,6 @@ GameScene::~GameScene()
 
 void GameScene::CreateScene()
 {
-  gameTerrain = new viqo::gameworld::GameTerrain( mSceneMgr );
 
   mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
   CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
@@ -46,6 +45,8 @@ void GameScene::CreateScene()
 
   //mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
   //mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
+
+  gameTerrain = new viqo::gameworld::GameTerrain( mSceneMgr );
 
   // How game object management's supposed to work:
   boost::shared_ptr<GameObject> goNinja( new MovableGameObject() );

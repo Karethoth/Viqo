@@ -114,6 +114,7 @@ set(HDRS
         ./src/viqo/gameworld/MovableGameObject.hpp
         ./src/viqo/gameworld/GameObject.hpp
         ./src/viqo/gameworld/GameRoadGraph.hpp
+        ./src/viqo/gameworld/GameRoadSystem.hpp
         ./src/viqo/gameworld/GameTerrain.hpp
         ./src/viqo/GameCamera.hpp
         ./src/viqo/Scene.hpp
@@ -128,6 +129,7 @@ set(SRCS
         ./src/viqo/gameworld/MovableGameObject.cpp
         ./src/viqo/gameworld/GameObject.cpp
         ./src/viqo/gameworld/GameRoadGraph.cpp
+        ./src/viqo/gameworld/GameRoadSystem.cpp
         ./src/viqo/gameworld/GameTerrain.cpp
         ./src/viqo/GameCamera.cpp
         ./src/viqo/Scene.cpp

@@ -23,6 +23,7 @@ namespace viqo
       GameRoadGraph( long int graphId )
       {
         id = graphId;
+        location = Ogre::Vector3( 0.0, 0.0, 0.0 );
       }
 
 
@@ -116,6 +117,16 @@ namespace viqo
 
 
 
+    struct GameRoadGraphAreaTreeNode
+    {
+      GameRoadGraphArea         *area;
+      GameRoadGraphAreaTreeNode *children[2];
+
+      GameRoadGraphAreaTreeNode( GameRoadGraphArea* );
+
+      void SetChildren( GameRoadGraphAreaTreeNode*,
+                        GameRoadGraphAreaTreeNode* );
+    };
   }
 }
 

@@ -6,6 +6,8 @@
 #include <OgreSceneManager.h>
 #include <OgreLight.h>
 
+#include "GameRoadSystem.hpp"
+
 
 namespace viqo
 {
@@ -18,6 +20,9 @@ namespace viqo
       Ogre::TerrainGroup *terrainGroup;
       bool terrainImported;
       Ogre::SceneManager *sceneMan;
+
+      GameRoadSystem roadSys;
+
 
      public:
       GameTerrain( Ogre::SceneManager* );
