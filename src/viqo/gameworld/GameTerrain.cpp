@@ -13,6 +13,7 @@ GameTerrain::GameTerrain( Ogre::SceneManager *sceneManager )
 
   roadSys.Generate();
   roadSys.Print();
+  roadSys.BuildRoads( sceneMan );
 
   std::vector<GameRoadGraph*> *graphs = roadSys.GetGraphs();
   std::vector<GameRoadGraph*>::iterator it;

@@ -64,8 +64,33 @@ GameRoadGraphArea *GameRoadGraphArea::Divide( std::vector<GameRoadGraph*> *graph
   f->location.x = (c->location.x + d->location.x) / 2.0;
   f->location.z = (c->location.z + d->location.z) / 2.0;
 
-  graphs->push_back( e );
-  graphs->push_back( f );
+  std::vector<GameRoadGraph*>::iterator it;
+  bool eFound = false;
+  bool fFound = false;
+  for( it = graphs->begin(); it != graphs->end(); ++it )
+  {
+    if( (*it)->location == e->location )
+    {
+      delete e;
+      e = (*it);
+      eFound = true;
+    }
+    else if( (*it)->location == e->location )
+    {
+      delete f;
+      f = (*it);
+      fFound = true;
+    }
+
+    if( eFound && fFound )
+      break;
+  }
+
+  if( !eFound )
+    graphs->push_back( e );
+
+  if( !fFound )
+    graphs->push_back( f );
 
   // A <-> E
   a->AddChild( e );

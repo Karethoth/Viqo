@@ -30,14 +30,36 @@ namespace viqo
 
       void AddChild( GameRoadGraph *graph )
       {
-        children.push_back( graph );
+        std::vector<GameRoadGraph*>::iterator it;
+        bool found = false;
+        for( it = children.begin(); it != children.end(); ++it )
+        {
+          if( (*it)->id == graph->id )
+          {
+            found = true;
+            break;
+          }
+        }
+        if( !found )
+          children.push_back( graph );
       }
 
 
 
       void AddParent( GameRoadGraph *graph )
       {
-        parents.push_back( graph );
+        std::vector<GameRoadGraph*>::iterator it;
+        bool found = false;
+        for( it = parents.begin(); it != parents.end(); ++it )
+        {
+          if( (*it)->id == graph->id )
+          {
+            found = true;
+            break;
+          }
+        }
+        if( !found )
+          parents.push_back( graph );
       }
 
 

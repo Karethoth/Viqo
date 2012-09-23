@@ -1,6 +1,8 @@
 #ifndef __VIQO_GAMEWORLD_GAMEROADSYSTEM_HPP__
 #define __VIQO_GAMEWORLD_GAMEROADSYSTEM_HPP__
 
+#include <OgreString.h>
+#include <OgreSceneManager.h>
 #include "GameRoadGraph.hpp"
 
 
@@ -15,6 +17,7 @@ namespace viqo
       GameRoadGraphAreaTreeNode  *roadRoot;
 
       bool GenerateChildren( GameRoadGraphAreaTreeNode *node );
+      bool BuildArea( GameRoadGraphAreaTreeNode*, Ogre::ManualObject* );
 
 
      public:
@@ -24,7 +27,10 @@ namespace viqo
       bool Generate();
       void Print();
 
+      Ogre::String BuildRoads( Ogre::SceneManager* );
+
       std::vector<GameRoadGraph*> *GetGraphs();
+      GameRoadGraphAreaTreeNode *GetRoadRoot();
     };
   }
 }

@@ -1,4 +1,5 @@
 #include "GameRoadSystem.hpp"
+#include <OgreManualObject.h>
 
 using namespace viqo::gameworld;
 
@@ -55,9 +56,11 @@ bool GameRoadSystem::Generate()
 
 bool GameRoadSystem::GenerateChildren( GameRoadGraphAreaTreeNode *node )
 {
-  if( (node->area->d->location.x - node->area->a->location.x) *
-      (node->area->d->location.z - node->area->a->location.z) <= 20 ||
-      rand()%100 >= 90 )
+  float area = (node->area->d->location.x - node->area->a->location.x) *
+               (node->area->d->location.z - node->area->a->location.z);
+  if( area <= 100 &&
+      (area <= 20 ||
+       rand()%100 >= 90) )
   {
     return false;
   }
@@ -114,5 +117,63 @@ void GameRoadSystem::Print()
 std::vector<GameRoadGraph*> *GameRoadSystem::GetGraphs()
 {
   return &roadGraphs;
+}
+
+
+
+GameRoadGraphAreaTreeNode *GameRoadSystem::GetRoadRoot()
+{
+  return roadRoot;
+}
+
+
+
+Ogre::String GameRoadSystem::BuildRoads( Ogre::SceneManager *sceneMan )
+{
+  Ogre::ManualObject *manObject = NULL;
+  Ogre::String manObjectName    = "Roads";
+  manObject = sceneMan->createManualObject( manObjectName );
+  manObject->setDynamic( false );
+  
+  manObject->begin( "BaseRoads", Ogre::RenderOperation::OT_LINE_LIST );
+  BuildArea( roadRoot, manObject );
+  manObject->end();
+
+  sceneMan->getRootSceneNode()->createChildSceneNode()->attachObject( manObject );
+  return manObjectName;
+}
+
+
+
+bool GameRoadSystem::BuildArea( GameRoadGraphAreaTreeNode *area, Ogre::ManualObject *manObject )
+{
+
+  if( area->children[0] != NULL )
+    BuildArea( area->children[0], manObject );
+
+  if( area->children[1] != NULL )
+    BuildArea( area->children[1], manObject );
+
+  if( area->children[0] != NULL &&
+      area->children[1] != NULL )
+  {
+    return true;
+  }
+
+
+  GameRoadGraphArea *a = area->area;
+
+  manObject->position( a->a->location*100 );
+  manObject->position( a->b->location*100 );
+
+  manObject->position( a->a->location*100 );
+  manObject->position( a->c->location*100 );
+
+  manObject->position( a->b->location*100 );
+  manObject->position( a->d->location*100 );
+
+  manObject->position( a->c->location*100 );
+  manObject->position( a->d->location*100 );
+  return true;
 }
 
