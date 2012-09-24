@@ -1,5 +1,6 @@
 #include "GameRoadSystem.hpp"
 #include <OgreManualObject.h>
+#include <OgreMath.h>
 
 using namespace viqo::gameworld;
 
@@ -135,9 +136,7 @@ Ogre::String GameRoadSystem::BuildRoads( Ogre::SceneManager *sceneMan )
   manObject = sceneMan->createManualObject( manObjectName );
   manObject->setDynamic( false );
   
-  manObject->begin( "BaseRoads", Ogre::RenderOperation::OT_LINE_LIST );
   BuildArea( roadRoot, manObject );
-  manObject->end();
 
   sceneMan->getRootSceneNode()->createChildSceneNode()->attachObject( manObject );
   return manObjectName;
@@ -160,21 +159,62 @@ bool GameRoadSystem::BuildArea( GameRoadGraphAreaTreeNode *area, Ogre::ManualObj
     return true;
   }
 
-
   GameRoadGraphArea *a = area->area;
 
-  manObject->position( a->a->location*100 );
-  manObject->position( a->b->location*100 );
-
-  manObject->position( a->a->location*100 );
-  manObject->position( a->c->location*100 );
-
-  manObject->position( a->b->location*100 );
-  manObject->position( a->d->location*100 );
-
-  manObject->position( a->c->location*100 );
-  manObject->position( a->d->location*100 );
+  BuildRoad( a->a, a->b, manObject );
+  BuildRoad( a->a, a->c, manObject );
 
   return true;
+}
+
+
+
+bool GameRoadSystem::BuildRoad( GameRoadGraph *a, GameRoadGraph *b, Ogre::ManualObject *manObject )
+{
+  Ogre::Vector3 direction = b->location - a->location;
+  direction.normalise();
+
+  Ogre::Vector3 xMod = Ogre::Vector3( 50, 50, 50 ) * direction;
+  Ogre::Vector3 zMod;
+
+  Ogre::Real theta = Ogre::Math::DegreesToRadians( 90 );
+  Ogre::Real cs = Ogre::Math::Cos( theta );
+  Ogre::Real sn = Ogre::Math::Sin( theta );
+
+  zMod.y = 0;
+  zMod.x = xMod.x * cs - xMod.z * sn;
+  zMod.z = xMod.x * sn + xMod.z * cs;
+
+  Ogre::Vector3 upNormal( 0, 1, 0 );
+
+
+  Ogre::Vector3 cornerA( a->location*100+xMod - zMod );
+  Ogre::Vector3 cornerB( a->location*100+xMod + zMod );
+  Ogre::Vector3 cornerC( b->location*100-xMod - zMod );
+  Ogre::Vector3 cornerD( b->location*100-xMod + zMod );
+
+  manObject->begin( "Examples/WaterStream", Ogre::RenderOperation::OT_TRIANGLE_LIST );
+
+  manObject->position( cornerA );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 0, 0 );
+  manObject->position( cornerB );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 1, 0 );
+  manObject->position( cornerC );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 0, 1 );
+
+  manObject->position( cornerD );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 1, 1 );
+  manObject->position( cornerC );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 0, 1 );
+  manObject->position( cornerB );
+  manObject->normal( upNormal );
+  manObject->textureCoord( 1, 0 );
+
+  manObject->end();
 }
 

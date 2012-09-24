@@ -18,6 +18,7 @@ namespace viqo
 
       bool GenerateChildren( GameRoadGraphAreaTreeNode *node );
       bool BuildArea( GameRoadGraphAreaTreeNode*, Ogre::ManualObject* );
+      bool BuildRoad( GameRoadGraph*, GameRoadGraph*, Ogre::ManualObject* );
 
 
      public:
