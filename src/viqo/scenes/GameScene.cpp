@@ -43,8 +43,8 @@ void GameScene::CreateScene()
   //CEGUI::System::getSingleton().setGUISheet(guiRoot);
 
 
-  //mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
-  //mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
+  mSceneMgr->setAmbientLight( Ogre::ColourValue( 0,0,0 ) );
+  mSceneMgr->setShadowTechnique( Ogre::SHADOWTYPE_TEXTURE_MODULATIVE );
 
   gameTerrain = new viqo::gameworld::GameTerrain( mSceneMgr );
 
@@ -68,21 +68,6 @@ void GameScene::CreateScene()
 
   //entGround->setMaterialName( "Examples/Rockwall" );
   //entGround->setCastShadows( false );
-
-  //Ogre::Light* pointLight = mSceneMgr->createLight( "pointLight" );
-  //pointLight->setType( Ogre::Light::LT_POINT );
-  //pointLight->setPosition( Ogre::Vector3(0, 150, 250) );
-
-  //pointLight->setDiffuseColour( 1.0, 0.0, 0.0 );
-  //pointLight->setSpecularColour( 1.0, 0.0, 0.0 );
-
-
-  //Ogre::Light* pointLight2 = mSceneMgr->createLight( "pointLight2" );
-  //pointLight2->setType( Ogre::Light::LT_POINT );
-  //pointLight2->setPosition( Ogre::Vector3(20, 150, -250) );
-
-  //pointLight2->setDiffuseColour( 1.0, 0.0, 1.0 );
-  //pointLight2->setSpecularColour( 1.0, 0.0, 1.0 );
 }
 
 

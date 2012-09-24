@@ -7,6 +7,7 @@
 #include <OgreLight.h>
 
 #include "GameRoadSystem.hpp"
+#include "GameBuildingSystem.hpp"
 
 
 namespace viqo
@@ -21,7 +22,8 @@ namespace viqo
       bool terrainImported;
       Ogre::SceneManager *sceneMan;
 
-      GameRoadSystem roadSys;
+      GameRoadSystem     roadSys;
+      GameBuildingSystem buildingSys;
 
 
      public:

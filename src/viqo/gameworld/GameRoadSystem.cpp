@@ -23,10 +23,10 @@ bool GameRoadSystem::Generate()
   GameRoadGraph *c = new GameRoadGraph( GenerateRoadGraphId() );
   GameRoadGraph *d = new GameRoadGraph( GenerateRoadGraphId() );
 
-  a->location = Ogre::Vector3( 0, 0, 0 );
-  b->location = Ogre::Vector3( 100, 0, 0 );
-  c->location = Ogre::Vector3( 0, 0, 100 );
-  d->location = Ogre::Vector3( 100, 0, 100 );
+  a->location = Ogre::Vector3( -50, 0, -50 );
+  b->location = Ogre::Vector3( 50, 0, -50 );
+  c->location = Ogre::Vector3( -50, 0, 50 );
+  d->location = Ogre::Vector3( 50, 0, 50 );
   
   roadGraphs.push_back( a );
   roadGraphs.push_back( b );
@@ -174,6 +174,7 @@ bool GameRoadSystem::BuildArea( GameRoadGraphAreaTreeNode *area, Ogre::ManualObj
 
   manObject->position( a->c->location*100 );
   manObject->position( a->d->location*100 );
+
   return true;
 }
 
